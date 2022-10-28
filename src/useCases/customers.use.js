@@ -14,13 +14,13 @@ async function create (newCustomer) {
 }
 
 function getAll () {
-  return Customer.find({})
+  return Customer.find({}).populate('reserve')
 }
 
 async function getById (idCustomer) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) throw new StatusHttp('Customer not found', 400)
-  return Customer.findById(customerFound)
+  return Customer.findById(customerFound).populate('reserve')
 }
 
 async function update (idCustomer, newData) {

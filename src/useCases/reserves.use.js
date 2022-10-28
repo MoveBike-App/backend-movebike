@@ -12,7 +12,7 @@ async function create (newReserve, userCurrent) {
   await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.initialDate.toUTCString(), reserveCreated.finalDate.toUTCString(), reserveCreated.totalPrice)
   console.log(userFound.email)
   await Customer.findByIdAndUpdate(userCurrent,
-    { $push: { reserves: reserveCreated._id } })
+    { $push: { reserve: reserveCreated._id } })
   return reserveCreated
 }
 

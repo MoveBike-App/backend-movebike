@@ -11,7 +11,3 @@ dbConnect()
   })
   .catch((error) => console.log('Error: ', error))
 
-const date = Date.now()
-console.log(date)
-const today = new Date(Date.now()).toUTCString()
-console.log(today)

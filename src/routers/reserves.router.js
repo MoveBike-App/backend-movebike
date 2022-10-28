@@ -23,10 +23,9 @@ router.get('/', auth, access('company'), async (request, response, next) => {
 })
 
 // GET
-router.get('/:idReserve', auth, access('company'), async (request, response, next) => {
+router.get('/:idReserve', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const getReserve = await reservesUseCases.getById(idReserve)
 
     response.json({
@@ -42,11 +41,12 @@ router.get('/:idReserve', auth, access('company'), async (request, response, nex
 })
 
 // POST
-router.post('/', auth, async (request, response, next) => {
+router.post('/', auth, access('customer'), async (request, response, next) => {
   try {
     const reserve = request.body
     const { userCurrent } = request
     const reserveCreated = await reservesUseCases.create(reserve, userCurrent)
+
     response.json({
       success: true,
       message: 'Reserve completed',
@@ -58,10 +58,9 @@ router.post('/', auth, async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idReserve', async (request, response, next) => {
+router.delete('/:idReserve', auth, access('customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const reserveDeleted = await reservesUseCases.deleteById(idReserve)
 
     response.json({
@@ -77,12 +76,10 @@ router.delete('/:idReserve', async (request, response, next) => {
 })
 
 // PATCH
-router.patch('/:idReserve', async (request, response, next) => {
+router.patch('/:idReserve', auth, access('customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const unUpdateReserve = request.body
-
     const reserveUpdated = await reservesUseCases.update(idReserve, unUpdateReserve)
 
     response.json({

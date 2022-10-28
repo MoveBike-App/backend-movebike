@@ -40,15 +40,12 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    required: false
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now()
-  }
+  reserve: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'reserves'
+  }]
+}, {
+  timestamps: true
 })
 
 export const Customer = mongoose.model('customers', customerSchema)

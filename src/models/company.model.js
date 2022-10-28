@@ -35,16 +35,9 @@ const companySchema = new mongoose.Schema({
   customers: [{ /* help */
     type: mongoose.Schema.Types.ObjectId,
     ref: 'customers'
-  }],
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    required: false
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now()
-  }
+  }]
+}, {
+  timestamps: true
 })
 
 export const Company = mongoose.model('companies', companySchema)

@@ -36,16 +36,9 @@ const reserveSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
     required: true
-  },
-  createdAt: {
-    type: Date,
-    default: Date.now(),
-    required: false
-  },
-  updatedAt: {
-    type: Date,
-    default: Date.now()
   }
+}, {
+  timestamps: true
 })
 
 export const Reserve = mongoose.model('reserves', reserveSchema)

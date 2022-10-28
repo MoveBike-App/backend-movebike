@@ -7,7 +7,7 @@ import { access } from '../middlewares/authRole.js'
 const router = express.Router()
 
 // GET
-router.get('/', auth, access('customer', 'company'), async (request, response, next) => {
+router.get('/', async (request, response, next) => {
   try {
     const allMotos = await motosUseCases.getAll()
 
