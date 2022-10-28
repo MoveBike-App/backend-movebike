@@ -43,7 +43,7 @@ router.get('/:idCustomer', auth, access('company'), async (request, response, ne
 })
 
 // POST
-router.post('/', auth, access('customer'), async (request, response, next) => {
+router.post('/', async (request, response, next) => {
   try {
     const { body: newCustomer } = request
 

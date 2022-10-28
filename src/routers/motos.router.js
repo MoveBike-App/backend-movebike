@@ -24,7 +24,7 @@ router.get('/', auth, access('customer', 'company'), async (request, response, n
 })
 
 // GET
-router.get('/:idMoto', auth, access('company', 'customer'), async (request, response, next) => {
+router.get('/:idMoto', async (request, response, next) => {
   try {
     const { idMoto } = request.params
 

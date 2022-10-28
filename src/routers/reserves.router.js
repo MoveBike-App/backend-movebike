@@ -1,6 +1,5 @@
 import express from 'express'
 import * as reservesUseCases from '../useCases/reserves.use.js'
-import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
 
@@ -43,13 +42,11 @@ router.get('/:idReserve', auth, access('company'), async (request, response, nex
 })
 
 // POST
-router.post('/', auth, access('customer'), async (request, response, next) => {
+router.post('/', auth, async (request, response, next) => {
   try {
-    const token = request.headers.authorization
     const reserve = request.body
-    const { id } = jwtDecode(token)
-    const reserveCreated = await reservesUseCases.create(reserve, id)
-
+    const { userCurrent } = request
+    const reserveCreated = await reservesUseCases.create(reserve, userCurrent)
     response.json({
       success: true,
       message: 'Reserve completed',
