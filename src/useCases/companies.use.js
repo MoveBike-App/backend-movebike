@@ -17,7 +17,7 @@ function getAll () {
 async function getById (idCompany) {
   const companyFound = await Company.findById(idCompany)
   if (!companyFound) throw new StatusHttp('Company not found', 400)
-  return Company.findById(companyFound)
+  return Company.findById(companyFound).populate('motos').populate('customers')
 }
 
 async function update (idCompany, newData) {

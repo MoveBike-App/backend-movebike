@@ -6,7 +6,7 @@ import { access } from '../middlewares/authRole.js'
 const router = express.Router()
 
 // GET
-router.get('/', auth, access('company'), async (request, response, next) => {
+router.get('/', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const allCompanies = await companyUseCases.getAll()
 
@@ -42,7 +42,7 @@ router.get('/:idCompany', auth, access('company'), async (request, response, nex
 })
 
 // POST
-router.post('/', auth, access('company'), async (request, response, next) => {
+router.post('/', async (request, response, next) => {
   try {
     const { body: newCompany } = request
     const companyCreated = await companyUseCases.create(newCompany)
@@ -59,7 +59,7 @@ router.post('/', auth, access('company'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idCompany', async (request, response, next) => {
+router.delete('/:idCompany', auth, access('company'), async (request, response, next) => {
   try {
     const { idCompany } = request.params
 
@@ -78,7 +78,7 @@ router.delete('/:idCompany', async (request, response, next) => {
 })
 
 // PATCH
-router.patch('/:idCompany', async (request, response, next) => {
+router.patch('/:idCompany', auth, access('company'), async (request, response, next) => {
   try {
     const { idCompany } = request.params
     const unUpdateCompany = request.body

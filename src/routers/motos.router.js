@@ -7,7 +7,7 @@ import { access } from '../middlewares/authRole.js'
 const router = express.Router()
 
 // GET
-router.get('/', auth, access('customer', 'company'), async (request, response, next) => {
+router.get('/', async (request, response, next) => {
   try {
     const allMotos = await motosUseCases.getAll()
 
@@ -24,7 +24,7 @@ router.get('/', auth, access('customer', 'company'), async (request, response, n
 })
 
 // GET
-router.get('/:idMoto', auth, access('company', 'customer'), async (request, response, next) => {
+router.get('/:idMoto', async (request, response, next) => {
   try {
     const { idMoto } = request.params
 

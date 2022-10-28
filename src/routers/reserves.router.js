@@ -1,6 +1,5 @@
 import express from 'express'
 import * as reservesUseCases from '../useCases/reserves.use.js'
-import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
 
@@ -24,10 +23,9 @@ router.get('/', auth, access('company'), async (request, response, next) => {
 })
 
 // GET
-router.get('/:idReserve', auth, access('company'), async (request, response, next) => {
+router.get('/:idReserve', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const getReserve = await reservesUseCases.getById(idReserve)
 
     response.json({
@@ -45,10 +43,9 @@ router.get('/:idReserve', auth, access('company'), async (request, response, nex
 // POST
 router.post('/', auth, access('customer'), async (request, response, next) => {
   try {
-    const token = request.headers.authorization
     const reserve = request.body
-    const { id } = jwtDecode(token)
-    const reserveCreated = await reservesUseCases.create(reserve, id)
+    const { userCurrent } = request
+    const reserveCreated = await reservesUseCases.create(reserve, userCurrent)
 
     response.json({
       success: true,
@@ -61,10 +58,9 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idReserve', async (request, response, next) => {
+router.delete('/:idReserve', auth, access('customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const reserveDeleted = await reservesUseCases.deleteById(idReserve)
 
     response.json({
@@ -80,12 +76,10 @@ router.delete('/:idReserve', async (request, response, next) => {
 })
 
 // PATCH
-router.patch('/:idReserve', async (request, response, next) => {
+router.patch('/:idReserve', auth, access('customer'), async (request, response, next) => {
   try {
     const { idReserve } = request.params
-
     const unUpdateReserve = request.body
-
     const reserveUpdated = await reservesUseCases.update(idReserve, unUpdateReserve)
 
     response.json({

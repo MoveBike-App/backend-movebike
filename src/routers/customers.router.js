@@ -6,7 +6,7 @@ import { access } from '../middlewares/authRole.js'
 const router = express.Router()
 
 // GET
-router.get('/', auth, access('company'), async (request, response, next) => {
+router.get('/', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const allCustomers = await customersUseCases.getAll()
 
@@ -24,7 +24,7 @@ router.get('/', auth, access('company'), async (request, response, next) => {
 })
 
 // GET
-router.get('/:idCustomer', auth, access('company'), async (request, response, next) => {
+router.get('/:idCustomer', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { idCustomer } = request.params
 
@@ -43,7 +43,7 @@ router.get('/:idCustomer', auth, access('company'), async (request, response, ne
 })
 
 // POST
-router.post('/', auth, access('customer'), async (request, response, next) => {
+router.post('/', async (request, response, next) => {
   try {
     const { body: newCustomer } = request
 
@@ -60,7 +60,7 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idCustomer', async (request, response, next) => {
+router.delete('/:idCustomer', auth, access('customer'), async (request, response, next) => {
   try {
     const { idCustomer } = request.params
 
@@ -79,7 +79,7 @@ router.delete('/:idCustomer', async (request, response, next) => {
 })
 
 // PATCH
-router.patch('/:idCustomer', async (request, response, next) => {
+router.patch('/:idCustomer', auth, access('customer'), async (request, response, next) => {
   try {
     const { idCustomer } = request.params
 
