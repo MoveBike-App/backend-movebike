@@ -2,6 +2,7 @@ import express from 'express'
 import * as reservesUseCases from '../useCases/reserves.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
+import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
 
 const router = express.Router()
 
@@ -58,7 +59,7 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idReserve', auth, access('customer'), async (request, response, next) => {
+router.delete('/:idReserve', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
     const { idReserve } = request.params
     const reserveDeleted = await reservesUseCases.deleteById(idReserve)
@@ -76,7 +77,7 @@ router.delete('/:idReserve', auth, access('customer'), async (request, response,
 })
 
 // PATCH
-router.patch('/:idReserve', auth, access('customer'), async (request, response, next) => {
+router.patch('/:idReserve', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
     const { idReserve } = request.params
     const unUpdateReserve = request.body

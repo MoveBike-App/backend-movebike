@@ -6,7 +6,9 @@ import { sendConfirmationEmail } from '../libs/sendgrid.js'
 async function create (newCustomer) {
   const { email, password } = newCustomer
   const customerFound = await Customer.findOne({ email })
-  if (customerFound) throw new StatusHttp('This customer already exist!', 400)
+  if (customerFound) {
+    throw new StatusHttp('This customer already exist!', 400)
+  }
   const encryptedPassword = await bcrypt.hash(password)
   await sendConfirmationEmail(newCustomer.email, newCustomer.name)
   console.log(newCustomer.email)
@@ -19,19 +21,26 @@ function getAll () {
 
 async function getById (idCustomer) {
   const customerFound = await Customer.findById(idCustomer)
-  if (!customerFound) throw new StatusHttp('Customer not found', 400)
-  return Customer.findById(customerFound).populate('reserve')
+  if (!customerFound) {
+    throw new StatusHttp('Customer not found', 400)
+  }
+  const customer = Customer.findById(customerFound).populate('reserve')
+  return customer
 }
 
 async function update (idCustomer, newData) {
   const customerFound = await Customer.findById(idCustomer)
-  if (!customerFound) throw new StatusHttp('Customer not found', 400)
+  if (!customerFound) {
+    throw new StatusHttp('Customer not found', 400)
+  }
   return Customer.findByIdAndUpdate(idCustomer, newData, { new: true })
 }
 
 async function deleteById (idCustomer) {
   const customerFound = await Customer.findById(idCustomer)
-  if (!customerFound) throw new StatusHttp('Customer not found', 400)
+  if (!customerFound) {
+    throw new StatusHttp('Customer not found', 400)
+  }
   return Customer.findByIdAndDelete(idCustomer)
 }
 

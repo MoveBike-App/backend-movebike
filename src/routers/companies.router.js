@@ -2,6 +2,7 @@ import express from 'express'
 import * as companyUseCases from '../useCases/companies.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
+import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
 
 const router = express.Router()
 
@@ -59,11 +60,11 @@ router.post('/', async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idCompany', auth, access('company'), async (request, response, next) => {
+router.delete('/:id', auth, access('company'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idCompany } = request.params
+    const { id } = request.params
 
-    const companyDeleted = await companyUseCases.deleteById(idCompany)
+    const companyDeleted = await companyUseCases.deleteById(id)
 
     response.json({
       success: true,
@@ -78,12 +79,12 @@ router.delete('/:idCompany', auth, access('company'), async (request, response, 
 })
 
 // PATCH
-router.patch('/:idCompany', auth, access('company'), async (request, response, next) => {
+router.patch('/:id', auth, access('company'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idCompany } = request.params
+    const { id } = request.params
     const unUpdateCompany = request.body
 
-    const companyUpdated = await companyUseCases.update(idCompany, unUpdateCompany)
+    const companyUpdated = await companyUseCases.update(id, unUpdateCompany)
 
     response.json({
       success: true,
