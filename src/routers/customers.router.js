@@ -2,6 +2,7 @@ import express from 'express'
 import * as customersUseCases from '../useCases/customers.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
+import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
 
 const router = express.Router()
 
@@ -28,16 +29,17 @@ router.get('/:idCustomer', auth, access('company', 'customer'), async (request, 
   try {
     const { idCustomer } = request.params
 
-    const getCostomer = await customersUseCases.getById(idCustomer)
-
+    const getCustomer = await customersUseCases.getById(idCustomer)
+    console.log(getCustomer)
     response.json({
       success: true,
       message: 'Customer',
       data: {
-        customer: getCostomer
+        customer: getCustomer
       }
     })
   } catch (error) {
+    console.log(error)
     next(error)
   }
 })
@@ -60,7 +62,7 @@ router.post('/', async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idCustomer', auth, access('customer'), async (request, response, next) => {
+router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
     const { idCustomer } = request.params
 
@@ -79,7 +81,7 @@ router.delete('/:idCustomer', auth, access('customer'), async (request, response
 })
 
 // PATCH
-router.patch('/:idCustomer', auth, access('customer'), async (request, response, next) => {
+router.patch('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
     const { idCustomer } = request.params
 
