@@ -43,7 +43,11 @@ const customerSchema = new mongoose.Schema({
   reserve: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'reserves'
-  }]
+  }],
+  validEmail: {
+    type: String,
+    default: false
+  }
 }, {
   timestamps: true
 })

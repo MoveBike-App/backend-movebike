@@ -52,7 +52,7 @@ const motoSchema = new mongoose.Schema({
     type: [Date],
     default: []
   },
-  company: { /* reference ready */
+  company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companies',
     required: true
