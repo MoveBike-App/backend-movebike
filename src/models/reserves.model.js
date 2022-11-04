@@ -1,12 +1,12 @@
 import mongoose from 'mongoose'
 
 const reserveSchema = new mongoose.Schema({
-  customer: { /* reference ready */
+  customer: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'customers',
     required: true
   },
-  vehicle: { /* help */
+  vehicle: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'motos',
     required: true
@@ -23,8 +23,6 @@ const reserveSchema = new mongoose.Schema({
   finalDate: {
     type: Date,
     default: new Date(Date.now())
-
-    // required: true
   },
   status: {
     type: String,

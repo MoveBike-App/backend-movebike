@@ -10,7 +10,7 @@ const handlerMail = new sgMail.MailService()
 
 handlerMail.setApiKey(SENDGRID_API_KEY)
 
-const sendConfirmationEmail = (to, name) => {
+const sendConfirmationEmail = (to, name, token) => {
   const msg = {
     to: { email: to },
     subject: 'Confirmación de cuenta',
@@ -19,6 +19,7 @@ const sendConfirmationEmail = (to, name) => {
     templateId: 'd-e356d0adb76a43829fad752f4bf604aa',
     dynamic_template_data: {
       name
+      // link: url a donde enviara el botón del email
     }
   }
   console.log(msg)
@@ -42,7 +43,31 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
   console.log(msg)
   return handlerMail.send(msg)
 }
+
+const sendReserveToCompany = (vehicle, initialDate, finalDate, totalPrice, name, phone, location, identify) => {
+  const msg = {
+    to: { email: 'movebikeapp@gmail.com' /* empresa con la que se trabajará */ },
+    subject: 'Tienes una nueva reserva',
+    fromname: 'MOVEBIKE',
+    from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
+    templateId: 'd-08c94abb80f64875b9a8d95327a314ed',
+    dynamic_template_data: {
+      vehicle,
+      initialDate,
+      finalDate,
+      totalPrice,
+      name,
+      phone,
+      location,
+      identify
+    }
+  }
+  console.log(msg)
+  return handlerMail.send(msg)
+}
+
 export {
   sendConfirmationEmail,
-  sendReserveEmail
+  sendReserveEmail,
+  sendReserveToCompany
 }

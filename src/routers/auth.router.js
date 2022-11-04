@@ -18,4 +18,21 @@ router.post('/login', async (request, response, next) => {
     next(error)
   }
 })
+
+/* router.post('/validEmail', async(request, response, next) {
+  try{
+    const { id } = request.newUser
+    const valid = await authUseCases.validEmail(id)
+    response.json({
+      succes:true,
+      data: {
+        message : valid
+      }
+    })
+  } catch(error) {
+    console.log(error)
+    next(error)
+  }
+})
+ */
 export default router

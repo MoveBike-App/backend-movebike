@@ -57,6 +57,7 @@ router.post('/', async (request, response, next) => {
       data: customerCreated
     })
   } catch (error) {
+    console.log(error)
     next(error)
   }
 })

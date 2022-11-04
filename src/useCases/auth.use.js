@@ -13,6 +13,14 @@ async function login (email, password) { /* la company podrá ingresar con su em
   return (jwt.sign({ id: emailFound._id, role: emailFound.role }))
 }
 
+/* async function validEmail (idUser) {
+  const custumerId = await Customer.findById(idUser)
+
+  if (custumerId) {
+    await Customer.findByIdAndUpdate(idUser, { validEmail: true })
+  }
+} */
+
 export {
   login
 }

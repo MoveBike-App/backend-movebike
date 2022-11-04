@@ -1,6 +1,7 @@
 import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
 import bcrypt from '../libs/bcrypt.js'
+import jwt from '../libs/jwt.js'
 import { sendConfirmationEmail } from '../libs/sendgrid.js'
 
 async function create (newCustomer) {
@@ -10,9 +11,11 @@ async function create (newCustomer) {
     throw new StatusHttp('This customer already exist!', 400)
   }
   const encryptedPassword = await bcrypt.hash(password)
-  await sendConfirmationEmail(newCustomer.email, newCustomer.name)
   console.log(newCustomer.email)
-  return await Customer.create({ ...newCustomer, password: encryptedPassword })
+  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword })
+/*   const token = jwt.sign({ id: newUser._id, role: newUser.role }, '10d')
+  await sendConfirmationEmail(newCustomer.email, newCustomer.name) */
+  return newUser
 }
 
 function getAll () {
