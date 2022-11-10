@@ -4,13 +4,10 @@
 function access (...validRoles) { /* puede recibir n cantidad de parametros */
   return (request, response, next) => {
     try {
-      console.log('rol del usuario logeado: ', request.roleCurrent)
-
       if (!validRoles.includes(request.roleCurrent)) throw new Error('not acces')
 
       next()
     } catch (error) {
-      console.log(error)
       response.json({
         success: false,
         message: error.message

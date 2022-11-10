@@ -6,7 +6,6 @@ function auth (request, response, next) {
     const { authorization: token } = request.headers
 
     const tokenDecoded = jwt.verify(token)
-    console.log(tokenDecoded) // {id: ''}
 
     if (!tokenDecoded) throw new Error('No autorizado D:')
     request.userCurrent = tokenDecoded.id

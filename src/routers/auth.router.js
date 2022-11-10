@@ -6,15 +6,13 @@ const router = express.Router()
 router.post('/login', async (request, response, next) => {
   try {
     const { email, password } = request.body
-    const token = await authUseCases.login(email, password)
-    console.log(token)
+    const userCurrent = await authUseCases.login(email, password)
     response.json({
       message: 'successful login',
-      succes: true,
-      token
+      success: true,
+      userCurrent
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
@@ -24,13 +22,12 @@ router.post('/login', async (request, response, next) => {
     const { id } = request.newUser
     const valid = await authUseCases.validEmail(id)
     response.json({
-      succes:true,
+      success:true,
       data: {
         message : valid
       }
     })
   } catch(error) {
-    console.log(error)
     next(error)
   }
 })

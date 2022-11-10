@@ -70,10 +70,7 @@ router.delete('/:idMoto', auth, access('company'), async (request, response, nex
 
     response.json({
       success: true,
-      message: 'Moto deleted',
-      data: {
-        moto: motoDeleted
-      }
+      message: 'Moto deleted'
     })
   } catch (error) {
     next(error)
