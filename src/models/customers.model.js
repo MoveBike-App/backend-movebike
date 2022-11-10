@@ -47,6 +47,9 @@ const customerSchema = new mongoose.Schema({
   validEmail: {
     type: String,
     default: false
+  },
+  company: {
+    type: String
   }
 }, {
   timestamps: true

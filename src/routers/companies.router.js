@@ -54,7 +54,6 @@ router.post('/', async (request, response, next) => {
       data: companyCreated
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
@@ -68,10 +67,7 @@ router.delete('/:id', auth, access('company'), accessOwnerAccount, async (reques
 
     response.json({
       success: true,
-      message: 'Company deleted',
-      data: {
-        company: companyDeleted
-      }
+      message: 'Company deleted'
     })
   } catch (error) {
     next(error)

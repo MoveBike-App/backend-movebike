@@ -19,7 +19,6 @@ router.get('/', auth, access('company', 'customer'), async (request, response, n
       }
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
@@ -30,7 +29,6 @@ router.get('/:idCustomer', auth, access('company', 'customer'), async (request, 
     const { idCustomer } = request.params
 
     const getCustomer = await customersUseCases.getById(idCustomer)
-    console.log(getCustomer)
     response.json({
       success: true,
       message: 'Customer',
@@ -39,7 +37,6 @@ router.get('/:idCustomer', auth, access('company', 'customer'), async (request, 
       }
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
@@ -57,7 +54,6 @@ router.post('/', async (request, response, next) => {
       data: customerCreated
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
@@ -65,16 +61,13 @@ router.post('/', async (request, response, next) => {
 // DELETE
 router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idCustomer } = request.params
+    const { id } = request.params
 
-    const customerDeleted = await customersUseCases.deleteById(idCustomer)
+    const customerDeleted = await customersUseCases.deleteById(id)
 
     response.json({
       success: true,
-      message: 'Customer deleted',
-      data: {
-        customer: customerDeleted
-      }
+      message: 'Customer deleted'
     })
   } catch (error) {
     next(error)
@@ -84,11 +77,11 @@ router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (reque
 // PATCH
 router.patch('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idCustomer } = request.params
+    const { id } = request.params
 
     const unUpdateCustomer = request.body
 
-    const customerUpdated = await customersUseCases.update(idCustomer, unUpdateCustomer)
+    const customerUpdated = await customersUseCases.update(id, unUpdateCustomer)
 
     response.json({
       success: true,

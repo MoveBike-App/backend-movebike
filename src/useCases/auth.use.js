@@ -8,9 +8,19 @@ async function login (email, password) { /* la company podrá ingresar con su em
   const emailFound = await Company.findOne({ email }) || await Customer.findOne({ email })
   if (!emailFound) throw new StatusHttp('invalid!')
   const isValidPassword = await bcrypt.compare(password, emailFound.password)
-  console.log(isValidPassword)
   if (!isValidPassword) throw new StatusHttp('try again!')
-  return (jwt.sign({ id: emailFound._id, role: emailFound.role }))
+  console.log({
+    token: jwt.sign({ id: emailFound._id }),
+    role: emailFound.role,
+    id: emailFound._id,
+    name: emailFound.name
+  })
+  return {
+    token: jwt.sign({ id: emailFound._id }),
+    role: emailFound.role,
+    id: emailFound._id,
+    name: emailFound.name
+  }
 }
 
 /* async function validEmail (idUser) {

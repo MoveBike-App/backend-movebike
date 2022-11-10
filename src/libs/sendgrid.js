@@ -22,8 +22,7 @@ const sendConfirmationEmail = (to, name, token) => {
       // link: url a donde enviara el botón del email
     }
   }
-  console.log(msg)
-  return handlerMail.send(msg)
+  return handlerMail.send()
 }
 
 const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
@@ -40,7 +39,6 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
       totalPrice
     }
   }
-  console.log(msg)
   return handlerMail.send(msg)
 }
 
@@ -62,7 +60,6 @@ const sendReserveToCompany = (vehicle, initialDate, finalDate, totalPrice, name,
       identify
     }
   }
-  console.log(msg)
   return handlerMail.send(msg)
 }
 

@@ -59,17 +59,14 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idReserve', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
+router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idReserve } = request.params
-    const reserveDeleted = await reservesUseCases.deleteById(idReserve)
+    const { id } = request.params
+    const reserveDeleted = await reservesUseCases.deleteById(id)
 
     response.json({
       success: true,
-      message: 'ReserveDeleted',
-      data: {
-        reserve: reserveDeleted
-      }
+      message: 'Reserve deleted'
     })
   } catch (error) {
     next(error)
@@ -77,11 +74,11 @@ router.delete('/:idReserve', auth, access('customer'), accessOwnerAccount, async
 })
 
 // PATCH
-router.patch('/:idReserve', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
+router.patch('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
   try {
-    const { idReserve } = request.params
+    const { id } = request.params
     const unUpdateReserve = request.body
-    const reserveUpdated = await reservesUseCases.update(idReserve, unUpdateReserve)
+    const reserveUpdated = await reservesUseCases.update(id, unUpdateReserve)
 
     response.json({
       success: true,
