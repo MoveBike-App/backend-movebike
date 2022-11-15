@@ -1,5 +1,5 @@
 import express from 'express'
-import * as motosUseCases from '../useCases/motos.use.js'
+import * as featuresUseCases from '../useCases/features.use.js'
 import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
@@ -9,13 +9,13 @@ const router = express.Router()
 // GET
 router.get('/', async (request, response, next) => {
   try {
-    const allMotos = await motosUseCases.getAll()
+    const allFeatures = await featuresUseCases.getAll()
 
     response.json({
       success: true,
-      message: 'All motos',
+      message: 'All features',
       data: {
-        motos: allMotos
+        features: allFeatures
       }
     })
   } catch (error) {
@@ -24,17 +24,17 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
-router.get('/:idMoto', async (request, response, next) => {
+router.get('/:idFeature', async (request, response, next) => {
   try {
-    const { idMoto } = request.params
+    const { idFeature } = request.params
 
-    const getMoto = await motosUseCases.getById(idMoto)
+    const getFeature = await featuresUseCases.getById(idFeature)
 
     response.json({
       success: true,
-      message: 'Moto',
+      message: 'Feature',
       data: {
-        moto: getMoto
+        feature: getFeature
       }
     })
   } catch (error) {
@@ -46,14 +46,14 @@ router.get('/:idMoto', async (request, response, next) => {
 router.post('/', auth, access('company'), async (request, response, next) => {
   try {
     const token = request.headers.authorization
-    const moto = request.body
+    const feature = request.body
     const { id } = jwtDecode(token)
-    const motoCreated = await motosUseCases.create(moto, id)
+    const featureCreated = await featuresUseCases.create(feature, id)
     response.json({
       success: true,
-      message: 'New moto created',
+      message: 'New feature created',
       data: {
-        motos: motoCreated
+        features: featureCreated
       }
     })
   } catch (error) {
@@ -66,11 +66,11 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
   try {
     const { id } = request.params
 
-    const motoDeleted = await motosUseCases.deleteById(id)
+    const featureDeleted = await featuresUseCases.deleteById(id)
 
     response.json({
       success: true,
-      message: 'Moto deleted'
+      message: 'Feature deleted'
     })
   } catch (error) {
     next(error)
@@ -81,14 +81,14 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
 router.patch('/:id', auth, access('company'), async (request, response, next) => {
   try {
     const { id } = request.params
-    const unUpdateMoto = request.body
+    const unUpdateFeature = request.body
 
-    const motoUpdated = await motosUseCases.update(id, unUpdateMoto)
+    const featureUpdated = await featuresUseCases.update(id, unUpdateFeature)
     response.json({
       success: true,
-      message: 'Moto updated',
+      message: 'Feature updated',
       data: {
-        moto: motoUpdated
+        feature: featureUpdated
       }
     })
   } catch (error) {
