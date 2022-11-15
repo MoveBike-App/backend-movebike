@@ -16,10 +16,12 @@ async function login (email, password) { /* la company podrá ingresar con su em
     name: emailFound.name
   })
   return {
-    token: jwt.sign({ id: emailFound._id }),
-    role: emailFound.role,
-    id: emailFound._id,
-    name: emailFound.name
+    token: jwt.sign({ id: emailFound._id, role: emailFound.role }),
+    userCurrent: {
+      role: emailFound.role,
+      id: emailFound._id,
+      name: emailFound.name
+    }
   }
 }
 

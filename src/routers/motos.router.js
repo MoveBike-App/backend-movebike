@@ -62,7 +62,7 @@ router.post('/', auth, access('company'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:idMoto', auth, access('company'), async (request, response, next) => {
+router.delete('/:id', auth, access('company'), async (request, response, next) => {
   try {
     const { idMoto } = request.params
 
@@ -78,7 +78,7 @@ router.delete('/:idMoto', auth, access('company'), async (request, response, nex
 })
 
 // PATCH
-router.patch('/:idMoto', auth, access('company'), async (request, response, next) => {
+router.patch('/:id', auth, access('company'), async (request, response, next) => {
   try {
     const { idMoto } = request.params
     const unUpdateMoto = request.body
