@@ -9,12 +9,7 @@ async function login (email, password) { /* la company podrá ingresar con su em
   if (!emailFound) throw new StatusHttp('invalid!')
   const isValidPassword = await bcrypt.compare(password, emailFound.password)
   if (!isValidPassword) throw new StatusHttp('try again!')
-  console.log({
-    token: jwt.sign({ id: emailFound._id }),
-    role: emailFound.role,
-    id: emailFound._id,
-    name: emailFound.name
-  })
+
   return {
     token: jwt.sign({ id: emailFound._id, role: emailFound.role }),
     userCurrent: {

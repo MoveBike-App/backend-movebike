@@ -40,10 +40,6 @@ const motoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  features: {
-    type: [String],
-    default: []
-  },
   totalReserves: {
     type: Number,
     required: true
@@ -56,7 +52,12 @@ const motoSchema = new mongoose.Schema({
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companies',
     required: true
-  }
+  },
+  features: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'features',
+    required: false
+  }]
 }, {
   timestamps: true
 })
