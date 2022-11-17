@@ -12,7 +12,7 @@ async function create (newCustomer, commpanyId, files) {
     throw new StatusHttp('This customer already exist!', 400)
   }
   const encryptedPassword = await bcrypt.hash(password)
-  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword, image: files[0].location, identify: files[1].location, keyImage: files[0].key, keyIdentify: files[1].key })
+  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword })
   await Company.findByIdAndUpdate(commpanyId,
     { $push: { customers: newUser._id } })
   /*   const token = jwt.sign({ id: newUser._id, role: newUser.role }, '10d')
@@ -33,7 +33,21 @@ async function getById (idCustomer) {
   return customer
 }
 
-async function update (idCustomer, newData) {
+async function update (idCustomer, newData, newFiles) {
+  if (newFiles) {
+    const image = newFiles.find(field => field.fieldname === 'image')
+    if (image) {
+      const { location, key } = image
+      newData.image = location
+      newData.keyImage = key
+    }
+    const identify = newFiles.find(field => field.fieldname === 'identify')
+    if (identify) {
+      const { location, key } = identify
+      newData.identify = location
+      newData.keyIdentify = key
+    }
+  }
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) {
     throw new StatusHttp('Customer not found', 400)

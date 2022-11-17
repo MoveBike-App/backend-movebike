@@ -10,12 +10,14 @@ function auth (request, response, next) {
     if (!tokenDecoded) throw new Error('No autorizado D:')
     request.userCurrent = tokenDecoded.id
     request.roleCurrent = tokenDecoded.role
+
     next()
   } catch (error) {
     response.status(401)
     response.json({
       success: false,
-      message: 'No autorizado u.u',
+      expired: true,
+      message: 'No autorizado',
       error: error.message
     })
   }
