@@ -10,7 +10,6 @@ async function create (newMoto, userCurrent, file) {
 
   return motoCreated
 }
-
 function getAll () {
   return Moto.find({}).populate({ path: 'company', select: ['name'] })
 }
@@ -32,6 +31,8 @@ async function deleteById (idMoto) {
   if (!motoFound) throw new StatusHttp('Moto not found', 400)
   return Moto.findByIdAndDelete(idMoto)
 }
+
+
 
 export {
   create,
