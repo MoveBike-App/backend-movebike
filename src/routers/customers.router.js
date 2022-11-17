@@ -77,14 +77,12 @@ router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (reque
 })
 
 // PATCH
-router.patch('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
+router.patch('/:id', auth, access('customer'), upload.any(), accessOwnerAccount, async (request, response, next) => {
   try {
     const { id } = request.params
+    const { body, files } = request
 
-    const unUpdateCustomer = request.body
-
-    const customerUpdated = await customersUseCases.update(id, unUpdateCustomer)
-
+    const customerUpdated = await customersUseCases.update(id, body, files)
     response.json({
       success: true,
       message: 'Customer updated',

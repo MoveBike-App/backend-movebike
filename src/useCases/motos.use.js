@@ -21,7 +21,13 @@ async function getById (idMoto) {
   return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] })
 }
 
-async function update (idMoto, newData) {
+async function update (idMoto, newData, newFile) {
+  if (newFile) {
+    const { location, key } = newFile
+    newData.image = location
+    newData.keyImage = key
+  }
+
   const motoFound = await Moto.findById(idMoto)
   if (!motoFound) throw new StatusHttp('Moto not found', 400)
   return Moto.findByIdAndUpdate(idMoto, newData, { new: true })
