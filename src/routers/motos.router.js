@@ -3,6 +3,7 @@ import * as motosUseCases from '../useCases/motos.use.js'
 import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
+import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 
@@ -43,12 +44,12 @@ router.get('/:idMoto', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, access('company'), async (request, response, next) => {
+router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
     const token = request.headers.authorization
-    const moto = request.body
+    const { body, file } = request
     const { id } = jwtDecode(token)
-    const motoCreated = await motosUseCases.create(moto, id)
+    const motoCreated = await motosUseCases.create(body, id, file)
     response.json({
       success: true,
       message: 'New moto created',

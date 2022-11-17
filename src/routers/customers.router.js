@@ -3,6 +3,7 @@ import * as customersUseCases from '../useCases/customers.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
 import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
+import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 
@@ -42,11 +43,12 @@ router.get('/:idCustomer', auth, access('company', 'customer'), async (request, 
 })
 
 // POST
-router.post('/', async (request, response, next) => {
+router.post('/', upload.any(), async (request, response, next) => {
   try {
-    const { body: newCustomer } = request
+    const { body, files } = request
+    const companyId = '636d504cf0e929aea4e753a2'
 
-    const customerCreated = await customersUseCases.create(newCustomer)
+    const customerCreated = await customersUseCases.create(body, companyId, files)
 
     response.json({
       success: true,

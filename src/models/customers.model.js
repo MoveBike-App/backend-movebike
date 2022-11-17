@@ -10,6 +10,14 @@ const customerSchema = new mongoose.Schema({
     trim: true,
     required: true
   },
+  image: {
+    type: String,
+    required: false
+  },
+  keyImage: {
+    type: String,
+    required: false
+  },
   email: {
     type: String,
     required: true,
@@ -34,11 +42,15 @@ const customerSchema = new mongoose.Schema({
   },
   identify: {
     type: String,
-    required: true
+    required: false
+  },
+  keyIdentify: {
+    type: String,
+    required: false
   },
   stripe_id: {
     type: String,
-    required: true
+    required: false
   },
   reserve: [{
     type: mongoose.Schema.Types.ObjectId,

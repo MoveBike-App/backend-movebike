@@ -10,6 +10,10 @@ const motoSchema = new mongoose.Schema({
     type: String,
     required: true
   },
+  keyImage: {
+    type: String,
+    required: false
+  },
   vehiclePlate: {
     type: String,
     required: true,
