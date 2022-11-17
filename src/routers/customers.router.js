@@ -3,7 +3,6 @@ import * as customersUseCases from '../useCases/customers.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
 import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
-import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 

@@ -3,7 +3,6 @@ import * as motosUseCases from '../useCases/motos.use.js'
 import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
-import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 
