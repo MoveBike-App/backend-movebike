@@ -2,9 +2,8 @@ import { Moto } from '../models/motos.model.js'
 import { Company } from '../models/company.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
 
-async function create (newMoto, userCurrent, file) {
-  const { location, key } = file
-  const motoCreated = await Moto.create({ ...newMoto, company: userCurrent, image: location, keyImage: key })
+async function create (newMoto, userCurrent) {
+  const motoCreated = await Moto.create({ ...newMoto, company: userCurrent })
   await Company.findByIdAndUpdate(userCurrent,
     { $push: { motos: motoCreated._id } })
 
