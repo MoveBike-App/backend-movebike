@@ -94,5 +94,4 @@ router.patch('/:id', auth, access('customer'), accessOwnerAccount, async (reques
     next(error)
   }
 })
-
 export default router
