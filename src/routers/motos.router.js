@@ -44,12 +44,12 @@ router.get('/:idMoto', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
+router.post('/', auth, access('company'), async (request, response, next) => {
   try {
     const token = request.headers.authorization
-    const { body, file } = request
+    const moto = request.body
     const { id } = jwtDecode(token)
-    const motoCreated = await motosUseCases.create(body, id, file)
+    const motoCreated = await motosUseCases.create(moto, id)
     response.json({
       success: true,
       message: 'New moto created',

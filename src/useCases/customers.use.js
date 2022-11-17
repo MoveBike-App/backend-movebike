@@ -1,24 +1,21 @@
 import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
-import { Company } from '../models/company.model.js'
 import bcrypt from '../libs/bcrypt.js'
 /* import jwt from '../libs/jwt.js'
 import { sendConfirmationEmail } from '../libs/sendgrid.js' */
 
-async function create (newCustomer, commpanyId, files) {
+async function create (newCustomer) {
   const { email, password } = newCustomer
   const customerFound = await Customer.findOne({ email })
   if (customerFound) {
     throw new StatusHttp('This customer already exist!', 400)
   }
   const encryptedPassword = await bcrypt.hash(password)
-  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword, image: files[0].location, identify: files[1].location, keyImage: files[0].key, keyIdentify: files[1].key })
-  await Company.findByIdAndUpdate(commpanyId,
-    { $push: { customers: newUser._id } })
-  /*   const token = jwt.sign({ id: newUser._id, role: newUser.role }, '10d')
-  await sendConfirmationEmail(newCustomer.email, newCustomer.name) */
-  return newUser
+/*   await sendConfirmationEmail(newCustomer.email, newCustomer.name)
+ */  console.log(newCustomer.email)
+  return await Customer.create({ ...newCustomer, password: encryptedPassword })
 }
+
 
 function getAll () {
   return Customer.find({}).populate('reserve')
