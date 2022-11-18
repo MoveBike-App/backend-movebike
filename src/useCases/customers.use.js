@@ -12,7 +12,7 @@ async function create (newCustomer, commpanyId, files) {
     throw new StatusHttp('This customer already exist!', 400)
   }
   const encryptedPassword = await bcrypt.hash(password)
-  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword })
+  const newUser = await Customer.create({ ...newCustomer, password: encryptedPassword, image: files[0].location, identify: files[1].location, keyImage: files[0].key, keyIdentify: files[1].key })
   await Company.findByIdAndUpdate(commpanyId,
     { $push: { customers: newUser._id } })
   /*   const token = jwt.sign({ id: newUser._id, role: newUser.role }, '10d')
