@@ -1,5 +1,7 @@
 import express from 'express'
 import * as authUseCases from '../useCases/auth.use.js'
+import { auth } from '../middlewares/auth.js'
+import jwt from '../libs/jwt.js'
 
 const router = express.Router()
 
@@ -18,19 +20,21 @@ router.post('/login', async (request, response, next) => {
   }
 })
 
-/* router.post('/validEmail', async(request, response, next) {
-  try{
-    const { id } = request.newUser
-    const valid = await authUseCases.validEmail(id)
+router.post('/validate-email', auth, async (request, response, next) => {
+  try {
+    const { authorization: token } = request.headers
+    const tokenDecoded = jwt.verify(token)
+    const id = tokenDecoded.id
+    const isValid = await authUseCases.validEmail(id)
     response.json({
-      success:true,
+      success: true,
       data: {
-        message : valid
+        message: isValid
       }
     })
-  } catch(error) {
+  } catch (error) {
     next(error)
   }
 })
- */
+
 export default router

@@ -18,11 +18,11 @@ const sendConfirmationEmail = (to, name, token) => {
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
     templateId: 'd-e356d0adb76a43829fad752f4bf604aa',
     dynamic_template_data: {
-      name
-      // link: url a donde enviara el botón del email
+      name,
+      link: `https://frontend-movebike.vercel.app/confirm-email/?token=${token}`
     }
   }
-  return handlerMail.send()
+  return handlerMail.send(msg)
 }
 
 const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {

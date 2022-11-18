@@ -39,8 +39,6 @@ async function deleteById (idMoto) {
   return Moto.findByIdAndDelete(idMoto)
 }
 
-
-
 export {
   create,
   getAll,
