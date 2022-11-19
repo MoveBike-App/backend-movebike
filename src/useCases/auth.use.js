@@ -20,14 +20,18 @@ async function login (email, password) { /* la company podrá ingresar con su em
   }
 }
 
-/* async function validEmail (idUser) {
-  const custumerId = await Customer.findById(idUser)
+async function validEmail (idCustomer) {
+  const custumerId = await Customer.findById(idCustomer)
 
   if (custumerId) {
-    await Customer.findByIdAndUpdate(idUser, { validEmail: true })
+    await Customer.findByIdAndUpdate(idCustomer, { validEmail: true })
+    return 'Email validado ✓'
+  } else {
+    return 'Intente de nuevo'
   }
-} */
+}
 
 export {
-  login
+  login,
+  validEmail
 }
