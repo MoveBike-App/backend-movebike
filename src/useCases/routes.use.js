@@ -1,5 +1,7 @@
 import { Route } from '../models/routes.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
+import { s3 } from '../libs/s3/index.js'
+import config from '../libs/s3/config.js'
 
 function getAll () {
   return Route.find({})
@@ -11,15 +13,22 @@ async function create (newRoute, file) {
   return routeCreated
 }
 
-async function update (idRoute, unupdatedRoute) {
+async function update (idRoute, newData, newFile) {
   const routeFound = await Route.findById(idRoute)
-  if (!routeFound) {
-    throw new StatusHttp('Route not found!')
+  if (!routeFound) throw new StatusHttp('Route not found', 400)
+
+  if (routeFound.image) {
+    const replaceImg = s3.deleteObject({ Key: routeFound.keyImage, Bucket: config.AWS_BUCKET_NAME }).promise()
+    if (!replaceImg) throw new StatusHttp('Try again', 400)
   }
-  const routeUpdated = Route.findByIdAndUpdate(idRoute, {
-    ...unupdatedRoute
-  })
-  return routeUpdated
+
+  if (newFile) {
+    const { location, key } = newFile
+    newData.image = location
+    newData.keyImage = key
+  }
+
+  return Route.findByIdAndUpdate(idRoute, newData, { new: true })
 }
 
 async function getById (idRoute) {
@@ -33,8 +42,10 @@ async function getById (idRoute) {
 
 async function deleteById (idRoute) {
   const routeFound = await Route.findById(idRoute)
-  if (!routeFound) {
-    throw new StatusHttp('Route not found')
+  if (!routeFound) throw new StatusHttp('Route not found', 400)
+  if (routeFound.image) {
+    const deleteImg = s3.deleteObject({ Key: routeFound.keyImage, Bucket: config.AWS_BUCKET_NAME }).promise()
+    if (!deleteImg) throw new StatusHttp('Try again!', 400)
   }
   return Route.findByIdAndDelete(idRoute)
 }

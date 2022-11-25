@@ -11,9 +11,14 @@ export default {
     httpOptions: {
       timeout: 90000
     },
+    Conditions: [
+      ['content-length-range', 0, 1048576 * 10], // (up to 1 MB) * 10
+      ['starts-with', '$Content-Type', 'image/'] // tried this
+    ],
     params: {
       ACL: 'public-read',
-      Bucket: process.env.AWS_BUCKET_NAME
+      Bucket: process.env.AWS_BUCKET_NAME,
+      ContentType: 'image/webp'
     }
   }
 }
