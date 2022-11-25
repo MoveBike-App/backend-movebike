@@ -1,8 +1,8 @@
 import express from 'express'
 import * as featuresUseCases from '../useCases/features.use.js'
-import jwtDecode from 'jwt-decode'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
+import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 
@@ -43,12 +43,10 @@ router.get('/:idFeature', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, access('company'), async (request, response, next) => {
+router.post('/', auth, access('company'), upload.single('icon'), async (request, response, next) => {
   try {
-    const token = request.headers.authorization
-    const feature = request.body
-    const { id } = jwtDecode(token)
-    const featureCreated = await featuresUseCases.create(feature, id)
+    const { body, file } = request
+    const featureCreated = await featuresUseCases.create(body, file)
     response.json({
       success: true,
       message: 'New feature created',
@@ -78,12 +76,11 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
 })
 
 // PATCH
-router.patch('/:id', auth, access('company'), async (request, response, next) => {
+router.patch('/:id', auth, access('company'), upload.single('icon'), async (request, response, next) => {
   try {
     const { id } = request.params
-    const unUpdateFeature = request.body
-
-    const featureUpdated = await featuresUseCases.update(id, unUpdateFeature)
+    const { body, file } = request.body
+    const featureUpdated = await featuresUseCases.update(id, body, file)
     response.json({
       success: true,
       message: 'Feature updated',

@@ -61,7 +61,7 @@ router.post('/', upload.any(), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (request, response, next) => {
+router.delete('/:id', auth, access('customer'), async (request, response, next) => {
   try {
     const { id } = request.params
 
@@ -77,7 +77,7 @@ router.delete('/:id', auth, access('customer'), accessOwnerAccount, async (reque
 })
 
 // PATCH
-router.patch('/:id', auth, access('customer'), upload.any(), accessOwnerAccount, async (request, response, next) => {
+router.patch('/:id', auth, access('customer'), upload.any(), async (request, response, next) => {
   try {
     const { id } = request.params
     const { body, files } = request

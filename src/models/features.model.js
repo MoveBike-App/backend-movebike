@@ -9,6 +9,10 @@ const featureSchema = new mongoose.Schema({
   icon: {
     type: String,
     required: false
+  },
+  keyIcon: {
+    type: String,
+    required: false
   }
 }, {
   timestamps: true

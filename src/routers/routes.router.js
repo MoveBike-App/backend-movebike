@@ -71,11 +71,11 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
 })
 
 // EDIT /Routes
-router.patch('/:id', auth, access('company'), async (request, response, next) => {
+router.patch('/:id', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
     const { id } = request.params
-    const unupdateRoute = request.body
-    const routeUpdated = await routesUseCases.update(id, unupdateRoute)
+    const { body, file } = request
+    const routeUpdated = await routesUseCases.update(id, body, file)
 
     response.json({
       success: true,
