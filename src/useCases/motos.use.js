@@ -14,13 +14,13 @@ async function create (newMoto, userCurrent, file) {
 }
 
 function getAll () {
-  return Moto.find({}).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon'] })
+  return Moto.find({}).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
 async function getById (idMoto) {
   const motoFound = await Moto.findById(idMoto)
   if (!motoFound) throw new StatusHttp('Moto not found', 400)
-  return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon'] })
+  return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
 async function update (idMoto, newData, newFile) {
