@@ -76,7 +76,7 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
 })
 
 // PATCH
-router.patch('/:id', auth, access('company'), upload.single('icon'), async (request, response, next) => {
+router.patch('/:id', auth, access('company'), upload.any(), async (request, response, next) => {
   try {
     const { id } = request.params
     const { body, file } = request.body
