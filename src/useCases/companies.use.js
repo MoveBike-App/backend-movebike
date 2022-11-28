@@ -14,8 +14,8 @@ function getAll () {
   return Company.find({}).populate({ path: 'motos', select: ['name'] }).populate({ path: 'customers', select: ['name'] })
 }
 
-async function getById (idCompany) {
-  const companyFound = await Company.findById(idCompany)
+async function getBySlug (slugCompany) {
+  const companyFound = await Company.findOne(slugCompany)
   if (!companyFound) throw new StatusHttp('Company not found', 400)
   return Company.findById(companyFound).populate('motos').populate('customers')
 }
@@ -35,7 +35,7 @@ async function deleteById (idCompany) {
 export {
   create,
   getAll,
-  getById,
+  getBySlug,
   update,
   deleteById
 }

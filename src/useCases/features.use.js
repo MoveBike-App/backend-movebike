@@ -13,8 +13,8 @@ function getAll () {
   return Feature.find({})
 }
 
-async function getById (idFeature) {
-  const featureFound = await Feature.findById(idFeature)
+async function getBySlug (slugFeature) {
+  const featureFound = await Feature.findOne(slugFeature)
   if (!featureFound) throw new StatusHttp('Feature not found', 400)
   return Feature.findById(featureFound)
 }
@@ -51,7 +51,7 @@ async function deleteById (idFeature) {
 export {
   create,
   getAll,
-  getById,
+  getBySlug,
   update,
   deleteById
 }

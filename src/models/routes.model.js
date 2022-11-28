@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import slug from 'mongoose-slug-generator'
+mongoose.plugin(slug)
 
 const routeSchema = new mongoose.Schema({
   image: {
@@ -15,6 +17,10 @@ const routeSchema = new mongoose.Schema({
     minLength: 3,
     maxLength: 500,
     trim: true
+  },
+  slug: {
+    type: String,
+    slug: 'title'
   },
   description: {
     type: String,

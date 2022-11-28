@@ -25,11 +25,11 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
-router.get('/:idMoto', async (request, response, next) => {
+router.get('/:slug', async (request, response, next) => {
   try {
-    const { idMoto } = request.params
+    const { slug } = request.params
 
-    const getMoto = await motosUseCases.getById(idMoto)
+    const getMoto = await motosUseCases.getBySlug({ slug })
 
     response.json({
       success: true,

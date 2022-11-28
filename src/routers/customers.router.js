@@ -25,11 +25,11 @@ router.get('/', auth, access('company', 'customer'), async (request, response, n
 })
 
 // GET
-router.get('/:idCustomer', auth, access('company', 'customer'), async (request, response, next) => {
+router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
-    const { idCustomer } = request.params
+    const { slug } = request.params
 
-    const getCustomer = await customersUseCases.getById(idCustomer)
+    const getCustomer = await customersUseCases.getBySlug({slug})
     response.json({
       success: true,
       message: 'Customer',
@@ -46,7 +46,7 @@ router.get('/:idCustomer', auth, access('company', 'customer'), async (request, 
 router.post('/', upload.any(), async (request, response, next) => {
   try {
     const { body, files } = request
-    const companyId = '636d504cf0e929aea4e753a2'
+    const companyId = '638523f3893c75ca3e49dfb9'
 
     const customerCreated = await customersUseCases.create(body, companyId, files)
 
