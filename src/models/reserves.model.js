@@ -4,9 +4,8 @@ mongoose.plugin(slug)
 
 const reserveSchema = new mongoose.Schema({
   reserveNumber: {
-    type: Number,
-    required: false,
-    default: '0001'
+    type: String,
+    required: false
   },
   customer: {
     type: mongoose.Schema.Types.ObjectId,

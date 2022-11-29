@@ -42,7 +42,7 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
   return handlerMail.send(msg)
 }
 
-const sendReserveToCompany = (vehicle, initialDate, finalDate, totalPrice, name, phone, location, identify) => {
+const sendReserveToCompany = (reserveNumber, vehicle, totalPrice, name, phone, location, identify) => {
   const msg = {
     to: { email: 'movebikeapp@gmail.com' /* empresa con la que se trabajará */ },
     subject: 'Tienes una nueva reserva',
@@ -50,9 +50,8 @@ const sendReserveToCompany = (vehicle, initialDate, finalDate, totalPrice, name,
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
     templateId: 'd-08c94abb80f64875b9a8d95327a314ed',
     dynamic_template_data: {
+      reserveNumber,
       vehicle,
-      initialDate,
-      finalDate,
       totalPrice,
       name,
       phone,
