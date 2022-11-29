@@ -3,20 +3,20 @@ import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
 import { sendReserveEmail, sendReserveToCompany } from '../libs/sendgrid.js'
 
-async function create (newReserve, userCurrent) {
+async function create (newReserve, userCurrent, reserveNo) {
   const userFound = await Customer.findById(userCurrent)
 
   if (!userFound) {
     throw new StatusHttp('User not found', 404)
   }
-  const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent })
+  const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })
 
   await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.totalPrice)
 
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
 
-  await sendReserveToCompany(reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
+  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
   return reserveCreated
 }
 
