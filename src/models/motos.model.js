@@ -52,7 +52,7 @@ const motoSchema = new mongoose.Schema({
   },
   totalReserves: {
     type: Number,
-    required: true
+    required: false
   },
   availableDate: {
     type: [Date],
