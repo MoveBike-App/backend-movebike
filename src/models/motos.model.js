@@ -1,10 +1,16 @@
 import mongoose from 'mongoose'
+import slug from 'mongoose-slug-generator'
+mongoose.plugin(slug)
 
 const motoSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
     required: true
+  },
+  slug: {
+    type: String,
+    slug: 'name'
   },
   image: {
     type: String,

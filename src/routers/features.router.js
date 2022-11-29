@@ -24,11 +24,11 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
-router.get('/:idFeature', async (request, response, next) => {
+router.get('/:slug', async (request, response, next) => {
   try {
-    const { idFeature } = request.params
+    const { slug } = request.params
 
-    const getFeature = await featuresUseCases.getById(idFeature)
+    const getFeature = await featuresUseCases.getBySlug({ slug })
 
     response.json({
       success: true,

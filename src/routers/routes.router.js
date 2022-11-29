@@ -24,10 +24,10 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET /Routes by Id
-router.get('/:id', async (request, response, next) => {
+router.get('/:slug', async (request, response, next) => {
   try {
-    const { id } = request.params
-    const getRoute = await routesUseCases.getById(id)
+    const { slug } = request.params
+    const getRoute = await routesUseCases.getBySlug({ slug })
     response.json({
       success: true,
       message: 'Ruote found',

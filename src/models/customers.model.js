@@ -1,4 +1,6 @@
 import mongoose from 'mongoose'
+import slug from 'mongoose-slug-generator'
+mongoose.plugin(slug)
 
 const customerSchema = new mongoose.Schema({
   role: {
@@ -9,6 +11,10 @@ const customerSchema = new mongoose.Schema({
     type: String,
     trim: true,
     required: true
+  },
+  slug: {
+    type: String,
+    slug: ['name', 'role']
   },
   image: {
     type: String,

@@ -24,10 +24,10 @@ router.get('/', auth, access('company'), async (request, response, next) => {
 })
 
 // GET
-router.get('/:idReserve', auth, access('company', 'customer'), async (request, response, next) => {
+router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
-    const { idReserve } = request.params
-    const getReserve = await reservesUseCases.getById(idReserve)
+    const { slug } = request.params
+    const getReserve = await reservesUseCases.getBySlug({ slug })
 
     response.json({
       success: true,

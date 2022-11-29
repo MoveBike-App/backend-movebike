@@ -11,12 +11,12 @@ async function create (newReserve, userCurrent) {
   }
   const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent })
 
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.initialDate.toUTCString(), reserveCreated.finalDate.toUTCString(), reserveCreated.totalPrice)
+  await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.totalPrice)
 
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
 
-  await sendReserveToCompany(reserveCreated.vehicle, reserveCreated.initialDate.toUTCString(), reserveCreated.finalDate.toUTCString(), reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
+  await sendReserveToCompany(reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
   return reserveCreated
 }
 
@@ -24,8 +24,8 @@ function getAll () {
   return Reserve.find({}).populate('customer')
 }
 
-async function getById (idReserve) {
-  const reserveFound = await Reserve.findById(idReserve)
+async function getBySlug (slugReserve) {
+  const reserveFound = await Reserve.findOne(slugReserve)
   if (!reserveFound) {
     throw new StatusHttp('Reserve not found', 400)
   }
@@ -51,7 +51,7 @@ async function deleteById (idReserve) {
 export {
   create,
   getAll,
-  getById,
+  getBySlug,
   update,
   deleteById
 }

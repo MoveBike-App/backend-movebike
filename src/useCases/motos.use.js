@@ -9,7 +9,6 @@ async function create (newMoto, userCurrent, file) {
   const motoCreated = await Moto.create({ ...newMoto, company: userCurrent, image: location, keyImage: key })
   await Company.findByIdAndUpdate(userCurrent,
     { $push: { motos: motoCreated._id } })
-
   return motoCreated
 }
 
@@ -17,8 +16,8 @@ function getAll () {
   return Moto.find({}).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
-async function getById (idMoto) {
-  const motoFound = await Moto.findById(idMoto)
+async function getBySlug (slugMoto) {
+  const motoFound = await Moto.findOne(slugMoto)
   if (!motoFound) throw new StatusHttp('Moto not found', 400)
   return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
@@ -54,7 +53,7 @@ async function deleteById (idMoto) {
 export {
   create,
   getAll,
-  getById,
+  getBySlug,
   update,
   deleteById
 }
