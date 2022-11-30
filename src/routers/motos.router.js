@@ -25,6 +25,25 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
+router.get('/:id', async (request, response, next) => {
+  try {
+    const { id } = request.params
+
+    const getMoto = await motosUseCases.getById(id)
+
+    response.json({
+      success: true,
+      message: 'Moto',
+      data: {
+        moto: getMoto
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+// GET
 router.get('/:slug', async (request, response, next) => {
   try {
     const { slug } = request.params
@@ -47,7 +66,8 @@ router.get('/:slug', async (request, response, next) => {
 router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
     const token = request.headers.authorization
-    const { body, file } = request
+    const { file, body } = request
+    console.log('REQUEST', request)
     const { id } = jwtDecode(token)
     const motoCreated = await motosUseCases.create(body, id, file)
     response.json({

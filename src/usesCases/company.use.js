@@ -7,17 +7,17 @@ async function create (newCompany) {
   const companyFound = await Company.findOne({ email })
   if (companyFound) throw new StatusHttp('This company is already registered', 400)
   const encryptedPassword = await bcrypt.hash(password)
-  return Company.create({ ...newCompany, password: encryptedPassword })
+  return await Company.create({ ...newCompany, password: encryptedPassword })
 }
 
 function getAll () {
-  return Company.find({}).populate({ path: 'motos', select: ['name'] }).populate({ path: 'customers', select: ['name'] })
+  return Company.find({})
 }
 
 async function getById (idCompany) {
   const companyFound = await Company.findById(idCompany)
   if (!companyFound) throw new StatusHttp('Company not found', 400)
-  return Company.findById(companyFound).populate('motos').populate('customers')
+  return Company.findById(companyFound)
 }
 
 async function update (idCompany, newData) {

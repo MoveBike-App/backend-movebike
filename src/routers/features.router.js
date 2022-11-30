@@ -24,6 +24,25 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
+router.get('/:id', async (request, response, next) => {
+  try {
+    const { id } = request.params
+
+    const getFeature = await featuresUseCases.getById(id)
+
+    response.json({
+      success: true,
+      message: 'Feature',
+      data: {
+        feature: getFeature
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+// GET
 router.get('/:slug', async (request, response, next) => {
   try {
     const { slug } = request.params

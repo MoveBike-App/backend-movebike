@@ -24,6 +24,14 @@ function getAll () {
   return Reserve.find({}).populate('customer')
 }
 
+async function getById (idReserve) {
+  const reserveFound = await Reserve.findById(idReserve)
+  if (!reserveFound) {
+    throw new StatusHttp('Reserve not found', 400)
+  }
+  return Reserve.findById(reserveFound).populate('customer')
+}
+
 async function getBySlug (slugReserve) {
   const reserveFound = await Reserve.findOne(slugReserve)
   if (!reserveFound) {
@@ -51,6 +59,7 @@ async function deleteById (idReserve) {
 export {
   create,
   getAll,
+  getById,
   getBySlug,
   update,
   deleteById

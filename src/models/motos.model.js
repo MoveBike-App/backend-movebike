@@ -28,7 +28,7 @@ const motoSchema = new mongoose.Schema({
   },
   model: {
     type: String,
-    required: true
+    required: false
   },
   minAge: {
     type: Number,
