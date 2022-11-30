@@ -67,7 +67,6 @@ router.post('/', auth, access('company'), upload.single('image'), async (request
   try {
     const token = request.headers.authorization
     const { file, body } = request
-    console.log('REQUEST', request)
     const { id } = jwtDecode(token)
     const motoCreated = await motosUseCases.create(body, id, file)
     response.json({
