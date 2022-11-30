@@ -24,13 +24,13 @@ router.get('/', auth, access('company', 'customer'), async (request, response, n
   }
 })
 
-/*  // GET
+// GET
 router.get('/:id' || '/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { id } = request.params
     const { slug } = request.params
 
-    const getCustomer = await customersUseCases.getById(id) || await customersUseCases.getBySlug( slug )
+    const getCustomer = await customersUseCases.getById(id) || await customersUseCases.getBySlug({ slug })
     response.json({
       success: true,
       message: 'Customer',
@@ -42,8 +42,8 @@ router.get('/:id' || '/:slug', auth, access('company', 'customer'), async (reque
     next(error)
   }
 })
-  */
-// GET
+
+/* // GET
 router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { slug } = request.params
@@ -59,7 +59,7 @@ router.get('/:slug', auth, access('company', 'customer'), async (request, respon
   } catch (error) {
     next(error)
   }
-})
+}) */
 
 // POST
 router.post('/', upload.any(), async (request, response, next) => {
