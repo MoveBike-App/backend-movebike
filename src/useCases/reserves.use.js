@@ -29,16 +29,16 @@ async function getById (idReserve) {
   if (!reserveFound) {
     throw new StatusHttp('Reserve not found', 400)
   }
-  return Reserve.findById(reserveFound).populate('customer')
+  return Reserve.findById(reserveFound).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'slug'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'price'] })
 }
 
-async function getBySlug (slugReserve) {
+/* async function getBySlug (slugReserve) {
   const reserveFound = await Reserve.findOne(slugReserve)
   if (!reserveFound) {
     throw new StatusHttp('Reserve not found', 400)
   }
   return Reserve.findById(reserveFound).populate('customer')
-}
+} */
 
 async function update (idReserve, newData) {
   const reserveFound = await Reserve.findById(idReserve)
@@ -60,7 +60,7 @@ export {
   create,
   getAll,
   getById,
-  getBySlug,
+  /* getBySlug, */
   update,
   deleteById
 }

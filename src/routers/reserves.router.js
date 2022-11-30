@@ -41,7 +41,7 @@ router.get('/:id', auth, access('company', 'customer'), async (request, response
   }
 })
 
-// GET
+/* // GET
 router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { slug } = request.params
@@ -57,7 +57,7 @@ router.get('/:slug', auth, access('company', 'customer'), async (request, respon
   } catch (error) {
     next(error)
   }
-})
+}) */
 
 // POST
 router.post('/', auth, access('customer'), async (request, response, next) => {

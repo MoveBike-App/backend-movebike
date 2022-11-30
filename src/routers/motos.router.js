@@ -6,7 +6,8 @@ import { access } from '../middlewares/authRole.js'
 import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
-
+router.use(upload.array())
+router.use(express.static('public'))
 // GET
 router.get('/', async (request, response, next) => {
   try {
@@ -24,7 +25,7 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-// GET
+/* // GET
 router.get('/:id', async (request, response, next) => {
   try {
     const { id } = request.params
@@ -42,7 +43,7 @@ router.get('/:id', async (request, response, next) => {
     next(error)
   }
 })
-
+ */
 // GET
 router.get('/:slug', async (request, response, next) => {
   try {
@@ -63,8 +64,9 @@ router.get('/:slug', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
+router.post('/', auth, access('company'), upload.array('image'), async (request, response, next) => {
   try {
+    console.log(request.body)
     const token = request.headers.authorization
     const { file, body } = request
     const { id } = jwtDecode(token)

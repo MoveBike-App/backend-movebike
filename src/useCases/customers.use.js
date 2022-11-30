@@ -34,23 +34,26 @@ function getAll () {
   return Customer.find({}).populate('reserve')
 }
 
-async function getById (idCustomer) {
+/* async function getById (idCustomer) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) {
     throw new StatusHttp('Customer not found', 400)
   }
   const customer = Customer.findById(customerFound).populate('reserve')
   return customer
-}
+} */
 
 async function getBySlug (slugCustomer) {
   const customerFound = await Customer.findOne(slugCustomer)
-  if (!customerFound) {
-    throw new StatusHttp('Customer not found', 400)
-  }console.log(customerFound)
-  const customer = Customer.findOne(customerFound).populate('reserve')
-  console.log('CUSTOMER', customer)
-  return customer
+  if (!customerFound) throw new StatusHttp('Customer not found', 400)
+  return Customer.findById(customerFound).populate({
+    path: 'reserve',
+    populate: {
+      path: 'vehicle',
+      select: ['name', 'price', 'image', 'keyImage', 'slug']
+    }
+  }
+  )
 }
 
 async function update (idCustomer, newData, newFiles) {
@@ -98,7 +101,6 @@ async function deleteById (idCustomer) {
 export {
   create,
   getAll,
-  getById,
   getBySlug,
   update,
   deleteById

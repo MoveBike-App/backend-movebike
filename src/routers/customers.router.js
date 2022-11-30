@@ -2,8 +2,8 @@ import express from 'express'
 import * as customersUseCases from '../useCases/customers.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
-import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
-import { upload } from '../middlewares/multer.js'
+/* import { accessOwnerAccount } from '../middlewares/ownerAccount.js'
+ */import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
 
@@ -24,12 +24,13 @@ router.get('/', auth, access('company', 'customer'), async (request, response, n
   }
 })
 
-// GET
-router.get('/:id', auth, access('company', 'customer'), async (request, response, next) => {
+/*  // GET
+router.get('/:id' || '/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
     const { id } = request.params
+    const { slug } = request.params
 
-    const getCustomer = await customersUseCases.getById(id)
+    const getCustomer = await customersUseCases.getById(id) || await customersUseCases.getBySlug( slug )
     response.json({
       success: true,
       message: 'Customer',
@@ -41,7 +42,7 @@ router.get('/:id', auth, access('company', 'customer'), async (request, response
     next(error)
   }
 })
-
+  */
 // GET
 router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
   try {
