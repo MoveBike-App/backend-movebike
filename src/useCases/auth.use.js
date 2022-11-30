@@ -11,11 +11,12 @@ async function login (email, password) {
   if (!isValidPassword) throw new StatusHttp('try again!')
 
   return {
-    token: jwt.sign({ id: emailFound._id, role: emailFound.role }),
+    token: jwt.sign({ id: emailFound._id, role: emailFound.role, slug: emailFound.slug }),
     userCurrent: {
       role: emailFound.role,
       id: emailFound._id,
-      name: emailFound.name
+      name: emailFound.name,
+      slug: emailFound.slug
     }
   }
 }
