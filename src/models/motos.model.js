@@ -6,11 +6,12 @@ const motoSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: true
+    required: false
   },
   slug: {
     type: String,
-    slug: 'name'
+    slug: 'name',
+    required: false
   },
   image: {
     type: String,
@@ -22,7 +23,7 @@ const motoSchema = new mongoose.Schema({
   },
   vehiclePlate: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   model: {
@@ -31,24 +32,24 @@ const motoSchema = new mongoose.Schema({
   },
   minAge: {
     type: Number,
-    required: true
+    required: false
   },
   vehicleType: {
     type: String,
     enum: ['moto', 'scooter'],
-    required: true
+    required: false
   },
   securityHold: {
     type: Number,
-    required: true
+    required: false
   },
   price: {
     type: Number,
-    required: true
+    required: false
   },
   inssurance: {
     type: String,
-    required: true
+    required: false
   },
   totalReserves: {
     type: Number,
@@ -56,12 +57,13 @@ const motoSchema = new mongoose.Schema({
   },
   availableDate: {
     type: [Date],
-    default: []
+    default: [],
+    required: false
   },
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companies',
-    required: true
+    required: false
   },
   features: [{
     type: mongoose.Schema.Types.ObjectId,
