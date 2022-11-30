@@ -4,7 +4,7 @@ import { StatusHttp } from '../libs/statusHttp.js'
 import bcrypt from '../libs/bcrypt.js'
 import jwt from '../libs/jwt.js'
 
-async function login (email, password) { /* la company podrá ingresar con su email a la cuenta de usuario? */
+async function login (email, password) {
   const emailFound = await Company.findOne({ email }) || await Customer.findOne({ email })
   if (!emailFound) throw new StatusHttp('invalid!')
   const isValidPassword = await bcrypt.compare(password, emailFound.password)
