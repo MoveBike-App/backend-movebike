@@ -54,10 +54,6 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: false
   },
-  stripe_id: {
-    type: String,
-    required: false
-  },
   reserve: [{
     type: mongoose.Schema.Types.ObjectId,
     ref: 'reserves'

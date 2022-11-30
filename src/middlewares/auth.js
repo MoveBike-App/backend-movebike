@@ -4,7 +4,7 @@ import jwt from '../libs/jwt.js'
 function auth (request, response, next) {
   try {
     const { authorization: token } = request.headers
-    console.log(request)
+    console.log(request.headers)
     const tokenDecoded = jwt.verify(token)
     if (!tokenDecoded) throw new Error('No autorizado D:')
     request.userCurrent = tokenDecoded.id

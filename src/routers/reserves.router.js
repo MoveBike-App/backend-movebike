@@ -64,8 +64,7 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
   try {
     const reserve = request.body
     const { userCurrent } = request
-    const reserveNumber = 'MB-0' + Math.floor(Math.random() * 1000)
-    const reserveCreated = await reservesUseCases.create(reserve, userCurrent, reserveNumber)
+    const reserveCreated = await reservesUseCases.create(reserve, userCurrent)
 
     response.json({
       success: true,
