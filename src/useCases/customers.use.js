@@ -34,6 +34,15 @@ function getAll () {
   return Customer.find({}).populate('reserve')
 }
 
+async function getById (idCustomer) {
+  const customerFound = await Customer.findById(idCustomer)
+  if (!customerFound) {
+    throw new StatusHttp('Customer not found', 400)
+  }
+  const customer = Customer.findById(customerFound).populate('reserve')
+  return customer
+}
+
 async function getBySlug (slugCustomer) {
   const customerFound = await Customer.findOne(slugCustomer)
   if (!customerFound) {
@@ -89,6 +98,7 @@ async function deleteById (idCustomer) {
 export {
   create,
   getAll,
+  getById,
   getBySlug,
   update,
   deleteById

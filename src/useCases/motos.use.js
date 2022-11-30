@@ -6,7 +6,7 @@ import config from '../libs/s3/config.js'
 
 async function create (newMoto, userCurrent, file) {
   const { location, key } = file
-  const motoCreated = await Moto.create({ ...newMoto, company: userCurrent , image: location, keyImage: key })
+  const motoCreated = await Moto.create({ ...newMoto, company: userCurrent, image: location, keyImage: key })
   await Company.findByIdAndUpdate(userCurrent,
     { $push: { motos: motoCreated._id } })
   return motoCreated
@@ -14,6 +14,12 @@ async function create (newMoto, userCurrent, file) {
 
 function getAll () {
   return Moto.find({}).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
+}
+
+async function getById (idMoto) {
+  const motoFound = await Moto.findById(idMoto)
+  if (!motoFound) throw new StatusHttp('Moto not found', 400)
+  return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] })
 }
 
 async function getBySlug (slugMoto) {
@@ -53,6 +59,7 @@ async function deleteById (idMoto) {
 export {
   create,
   getAll,
+  getById,
   getBySlug,
   update,
   deleteById
