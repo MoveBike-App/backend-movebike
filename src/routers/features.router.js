@@ -42,7 +42,7 @@ router.get('/:id', async (request, response, next) => {
   }
 })
 
-// GET
+/* // GET
 router.get('/:slug', async (request, response, next) => {
   try {
     const { slug } = request.params
@@ -60,7 +60,7 @@ router.get('/:slug', async (request, response, next) => {
     next(error)
   }
 })
-
+ */
 // CREATE
 router.post('/', auth, access('company'), upload.single('icon'), async (request, response, next) => {
   try {

@@ -24,11 +24,11 @@ router.get('/', auth, access('company', 'customer'), async (request, response, n
 })
 
 // GET
-router.get('/:slug', auth, access('company'), async (request, response, next) => {
+router.get('/:id', auth, access('company'), async (request, response, next) => {
   try {
-    const { slug } = request.params
+    const { id } = request.params
 
-    const getCompany = await companyUseCases.getBySlug({ slug })
+    const getCompany = await companyUseCases.getById(id)
 
     response.json({
       success: true,

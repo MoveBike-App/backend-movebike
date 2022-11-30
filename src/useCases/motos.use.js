@@ -16,11 +16,11 @@ function getAll () {
   return Moto.find({}).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
-async function getById (idMoto) {
+/* async function getById (idMoto) {
   const motoFound = await Moto.findById(idMoto)
   if (!motoFound) throw new StatusHttp('Moto not found', 400)
   return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] })
-}
+} */
 
 async function getBySlug (slugMoto) {
   const motoFound = await Moto.findOne(slugMoto)
@@ -59,7 +59,6 @@ async function deleteById (idMoto) {
 export {
   create,
   getAll,
-  getById,
   getBySlug,
   update,
   deleteById
