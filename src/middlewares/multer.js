@@ -18,9 +18,6 @@ const multerS3Config = multerS3({
   s3: s3Client,
   bucket: config.s3.params.Bucket,
   acl: 'public-read',
-  headers: {
-    'Content-Type': 'image/png' // tried this (this actually does something, it stops working with error 412. "ERR_CONNECTION_RESET 412 (Precondition Failed)")
-  },
   metadata: function (req, file, cb) {
     cb(null, { fieldName: file.originalname })
   },

@@ -39,11 +39,18 @@ async function getById (idCustomer) {
   if (!customerFound) {
     throw new StatusHttp('Customer not found', 400)
   }
-  const customer = Customer.findById(customerFound).populate('reserve')
+  const customer = Customer.findById(customerFound).populate({
+    path: 'reserve',
+    populate: {
+      path: 'vehicle',
+      select: ['name', 'price', 'image', 'keyImage', 'slug']
+    }
+  }
+  )
   return customer
 }
 
-async function getBySlug (slugCustomer) {
+/* async function getBySlug (slugCustomer) {
   const customerFound = await Customer.findOne(slugCustomer)
   if (!customerFound) throw new StatusHttp('Customer not found', 400)
   return Customer.findById(customerFound).populate({
@@ -55,7 +62,7 @@ async function getBySlug (slugCustomer) {
   }
   )
 }
-
+ */
 async function update (idCustomer, newData, newFiles) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) throw new StatusHttp('Customer not found', 400)
@@ -102,7 +109,6 @@ export {
   create,
   getAll,
   getById,
-  getBySlug,
   update,
   deleteById
 }

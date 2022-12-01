@@ -62,14 +62,13 @@ router.get('/:slug', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', upload.single('image'), async (request, response, next) => {
+router.post('/', auth, upload.single('image'), async (request, response, next) => {
   try {
-    const token = request.headers.authorization
-    const { file, body } = request
-    const { id } = jwtDecode(token)
-    
-    console.log(file)
-    const motoCreated = await motosUseCases.create(body, id, file)
+    const { body, userCurrent } = request
+    const file = request.file
+    console.log('request', request)
+
+    const motoCreated = await motosUseCases.create(body, userCurrent, file)
     response.json({
       success: true,
       message: 'New moto created',
