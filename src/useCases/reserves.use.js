@@ -9,7 +9,9 @@ async function create (newReserve, userCurrent) {
   if (!userFound) {
     throw new StatusHttp('User not found', 404)
   }
-  const reserveNo = await Reserve.estimatedDocumentCount() + 1
+  const countReserves = await Reserve.estimatedDocumentCount() + 1
+  const reserveNo = `MB-00${countReserves}`
+  console.log(reserveNo)
   const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })
 
   await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.totalPrice)

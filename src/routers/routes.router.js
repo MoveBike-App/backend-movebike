@@ -23,7 +23,25 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-// GET /Routes by Id
+// GET
+router.get('/:id', auth, access('company', 'customer'), async (request, response, next) => {
+  try {
+    const { id } = request.params
+    const getRoute = await routesUseCases.getById(id)
+
+    response.json({
+      success: true,
+      message: 'Route',
+      data: {
+        reserves: getRoute
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+/* // GET /Routes by Id
 router.get('/:slug', async (request, response, next) => {
   try {
     const { slug } = request.params
@@ -39,7 +57,7 @@ router.get('/:slug', async (request, response, next) => {
     next(error)
   }
 })
-
+ */
 // POST /Routes
 router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
