@@ -10,7 +10,6 @@ function sign (payload) {
 }
 
 function verify (token) {
-  console.log('JWT', JWT_SECRET);
   return jwt.verify(token, JWT_SECRET)
 }
 

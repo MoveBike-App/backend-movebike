@@ -38,7 +38,7 @@ async function getById (idRoute) {
   return Route.findById(routeFound)
 }
 
-/* 
+/*
 async function getBySlug (slugRoute) {
   const routeFound = await Route.findOne(slugRoute)
 

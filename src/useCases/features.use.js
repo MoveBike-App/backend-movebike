@@ -39,7 +39,6 @@ async function update (idFeature, newData, newFile) {
     newData.icon = location
     newData.keyIcon = key
   }
-  console.log(newFile, newData)
   return Feature.findByIdAndUpdate(idFeature, newData, { new: true })
 }
 

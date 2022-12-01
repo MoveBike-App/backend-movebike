@@ -66,7 +66,6 @@ router.post('/', auth, upload.single('image'), async (request, response, next) =
   try {
     const { body, userCurrent } = request
     const file = request.file
-    console.log('request', request)
 
     const motoCreated = await motosUseCases.create(body, userCurrent, file)
     response.json({
