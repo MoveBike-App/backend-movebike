@@ -7,7 +7,7 @@ import { sendConfirmationEmail } from '../libs/sendgrid.js'
 import { s3 } from '../libs/s3/index.js'
 import config from '../libs/s3/config.js'
 
-async function create (newCustomer, commpanyId, files) {
+async function create (newCustomer, commpanyId, file) {
   const { email, password } = newCustomer
   const customerFound = await Customer.findOne({ email })
   if (customerFound) {
@@ -18,10 +18,8 @@ async function create (newCustomer, commpanyId, files) {
     {
       ...newCustomer,
       password: encryptedPassword,
-      image: files[0].location,
-      identify: files[1].location,
-      keyImage: files[0].key,
-      keyIdentify: files[1].key
+      identify: file[0].location,
+      keyIdentify: file[0].key
     })
   await Company.findByIdAndUpdate(commpanyId,
     { $push: { customers: newUser._id } })
@@ -63,20 +61,12 @@ async function getById (idCustomer) {
   )
 }
  */
-async function update (idCustomer, newData, newFiles) {
+async function update (idCustomer, newData, newFile) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) throw new StatusHttp('Customer not found', 400)
 
-  if (newFiles) {
-    const image = newFiles.find(field => field.fieldname === 'image')
-    if (image) {
-      const replaceImg = s3.deleteObject({ Key: customerFound.keyImage, Bucket: config.AWS_BUCKET_NAME }).promise()
-      if (!replaceImg) throw new StatusHttp('Try again', 400)
-      const { location, key } = image
-      newData.image = location
-      newData.keyImage = key
-    }
-    const identify = newFiles.find(field => field.fieldname === 'identify')
+  if (newFile) {
+    const identify = newFile.find(field => field.fieldname === 'identify')
     if (identify) {
       const replaceIdentify = s3.deleteObject({ Key: customerFound.keyIdentify, Bucket: config.AWS_BUCKET_NAME }).promise()
       if (!replaceIdentify) throw new StatusHttp('Try again', 400)
@@ -93,10 +83,6 @@ async function deleteById (idCustomer) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) {
     throw new StatusHttp('Customer not found', 400)
-  }
-  if (customerFound.image) {
-    const deleteImg = s3.deleteObject({ Key: customerFound.keyImage, Bucket: config.AWS_BUCKET_NAME }).promise()
-    if (!deleteImg) throw new StatusHttp('Try again!', 400)
   }
   if (customerFound.identify) {
     const deleteImg = s3.deleteObject({ Key: customerFound.keyIdentify, Bucket: config.AWS_BUCKET_NAME }).promise()

@@ -89,7 +89,7 @@ router.delete('/:id', auth, access('company'), async (request, response, next) =
 })
 
 // EDIT /Routes
-router.patch('/:id', auth, access('company'), upload.single('image'), async (request, response, next) => {
+router.patch('/:id', upload.single('image'), async (request, response, next) => {
   try {
     const { id } = request.params
     const { body, file } = request
