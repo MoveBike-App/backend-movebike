@@ -77,7 +77,7 @@ router.post('/', auth, access('customer'), async (request, response, next) => {
 })
 
 // DELETE
-router.delete('/:id', auth, access('customer'), accessOwnerReserve, async (request, response, next) => {
+router.delete('/:id', auth, async (request, response, next) => {
   try {
     const { id } = request.params
     const reserveDeleted = await reservesUseCases.deleteById(id)

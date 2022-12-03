@@ -33,6 +33,10 @@ const reserveSchema = new mongoose.Schema({
     type: Date,
     required: false
   },
+  totalDays: {
+    type: Number,
+    required: false
+  },
   status: {
     type: String,
     required: true,
@@ -43,6 +47,10 @@ const reserveSchema = new mongoose.Schema({
     type: Boolean,
     default: false,
     required: true
+  },
+  payment_id: {
+    type: String,
+    required: false
   }
 }, {
   timestamps: true

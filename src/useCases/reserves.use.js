@@ -23,7 +23,7 @@ async function create (newReserve, userCurrent) {
 }
 
 function getAll () {
-  return Reserve.find({}).populate('customer')
+  return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'price'] })
 }
 
 async function getById (idReserve) {
@@ -31,7 +31,7 @@ async function getById (idReserve) {
   if (!reserveFound) {
     throw new StatusHttp('Reserve not found', 400)
   }
-  return Reserve.findById(reserveFound).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'slug'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'price'] })
+  return Reserve.findById(reserveFound).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'price'] })
 }
 
 /* async function getBySlug (slugReserve) {

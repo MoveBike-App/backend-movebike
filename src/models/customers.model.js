@@ -10,15 +10,11 @@ const customerSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: true
+    required: false
   },
   slug: {
     type: String,
     slug: ['name', 'role']
-  },
-  image: {
-    type: String,
-    required: false
   },
   keyImage: {
     type: String,
@@ -36,7 +32,7 @@ const customerSchema = new mongoose.Schema({
   },
   location: {
     type: String,
-    required: true
+    required: false
   },
   phone: {
     type: String,
@@ -44,11 +40,11 @@ const customerSchema = new mongoose.Schema({
   },
   isVerify: {
     type: Boolean,
-    required: true
+    required: false
   },
   identify: {
     type: String,
-    required: false
+    required: true
   },
   keyIdentify: {
     type: String,
