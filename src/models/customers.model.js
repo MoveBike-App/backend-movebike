@@ -16,10 +16,6 @@ const customerSchema = new mongoose.Schema({
     type: String,
     slug: ['name', 'role']
   },
-  keyImage: {
-    type: String,
-    required: false
-  },
   email: {
     type: String,
     required: true,

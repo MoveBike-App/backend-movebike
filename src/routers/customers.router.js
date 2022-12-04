@@ -62,12 +62,12 @@ router.get('/:slug', auth, access('company', 'customer'), async (request, respon
 }) */
 
 // POST
-router.post('/', upload.any(), async (request, response, next) => {
+router.post('/', upload.single('identify'), async (request, response, next) => {
   try {
-    const { body, files } = request
+    const { body, file } = request
     const companyId = '638523f3893c75ca3e49dfb9'
 
-    const customerCreated = await customersUseCases.create(body, companyId, files)
+    const customerCreated = await customersUseCases.create(body, companyId, file)
 
     response.json({
       success: true,

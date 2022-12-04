@@ -16,7 +16,8 @@ async function login (email, password) {
       role: emailFound.role,
       id: emailFound._id,
       name: emailFound.name,
-      slug: emailFound.slug
+      slug: emailFound.slug,
+      validEmail: emailFound.validEmail
     }
   }
 }
