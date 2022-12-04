@@ -92,7 +92,7 @@ router.delete('/:id', auth, async (request, response, next) => {
 })
 
 // PATCH
-router.patch('/:id', auth, access('customer', 'company'), accessOwnerReserve, async (request, response, next) => {
+router.patch('/:id', auth, access('customer', 'company'), async (request, response, next) => {
   try {
     const { id } = request.params
     const unUpdateReserve = request.body
@@ -106,6 +106,7 @@ router.patch('/:id', auth, access('customer', 'company'), accessOwnerReserve, as
       }
     })
   } catch (error) {
+    console.log(error);
     next(error)
   }
 })

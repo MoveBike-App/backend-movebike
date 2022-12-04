@@ -18,8 +18,8 @@ async function create (newCustomer, commpanyId, file) {
     {
       ...newCustomer,
       password: encryptedPassword,
-      identify: file[0].location,
-      keyIdentify: file[0].key
+      identify: file.location,
+      keyIdentify: file.key
     })
   await Company.findByIdAndUpdate(commpanyId,
     { $push: { customers: newUser._id } })
