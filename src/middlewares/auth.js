@@ -11,6 +11,7 @@ function auth (request, response, next) {
 
     next()
   } catch (error) {
+    console.log(error)
     response.status(401)
     response.json({
       success: false,
