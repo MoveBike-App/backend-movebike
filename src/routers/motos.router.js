@@ -25,11 +25,13 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
-router.get('/:idMoto', async (request, response, next) => {
+router.get('/:moto', async (request, response, next) => {
   try {
-    const { idMoto } = request.params
+    const { moto } = request.params
+    const { typesearch } = request.headers
 
-    const getMoto = await motosUseCases.getById(idMoto)
+    console.log(request.params, request.headers)
+    const getMoto = await motosUseCases.getByType(moto, typesearch)
 
     response.json({
       success: true,
