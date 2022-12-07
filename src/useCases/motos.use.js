@@ -25,12 +25,12 @@ function getAll () {
     .populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
-function getByAvailability () {
+/* function getByAvailability () {
   return Reserve.find({
     initialDate: { $gt: new Date('2022-11-01') },
     finalDate: { $lt: new Date('2022-12-03') }
   })
-}
+} */
 
 /* async function getById (idMoto) {
   const motoFound = await Moto.findById(idMoto)

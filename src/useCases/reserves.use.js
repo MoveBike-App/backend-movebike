@@ -22,9 +22,8 @@ async function create (newReserve, userCurrent) {
   return reserveCreated
 }
 
-
-function getAll(){
-  return Reserve.find({})
+function getAll () {
+  return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
 }
 /* async function getAll () {
   const notAvailableDates = await Reserve.find({
