@@ -43,11 +43,13 @@ router.get('/:id', async (request, response, next) => {
 })
  */
 // GET
-router.get('/:slug', async (request, response, next) => {
+router.get('/:moto', async (request, response, next) => {
   try {
-    const { slug } = request.params
+    const { moto } = request.params
+    const { typesearch } = request.headers
 
-    const getMoto = await motosUseCases.getBySlug({ slug })
+    console.log(request.params, request.headers)
+    const getMoto = await motosUseCases.getByType(moto, typesearch)
 
     response.json({
       success: true,
@@ -62,57 +64,71 @@ router.get('/:slug', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, upload.single('image'), async (request, response, next) => {
-  try {
-    const { body, userCurrent } = request
-    const file = request.file
+router.post(
+  '/',
+  auth,
+  upload.single('image'),
+  async (request, response, next) => {
+    try {
+      const { body, userCurrent } = request
+      const file = request.file
 
-    const motoCreated = await motosUseCases.create(body, userCurrent, file)
-    response.json({
-      success: true,
-      message: 'New moto created',
-      data: {
-        moto: motoCreated
-      }
-    })
-  } catch (error) {
-    next(error)
+      const motoCreated = await motosUseCases.create(body, userCurrent, file)
+      response.json({
+        success: true,
+        message: 'New moto created',
+        data: {
+          moto: motoCreated
+        }
+      })
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 // DELETE
-router.delete('/:id', auth, access('company'), async (request, response, next) => {
-  try {
-    const { id } = request.params
+router.delete(
+  '/:id',
+  auth,
+  access('company'),
+  async (request, response, next) => {
+    try {
+      const { id } = request.params
 
-    const motoDeleted = await motosUseCases.deleteById(id)
+      const motoDeleted = await motosUseCases.deleteById(id)
 
-    response.json({
-      success: true,
-      message: 'Moto deleted'
-    })
-  } catch (error) {
-    next(error)
+      response.json({
+        success: true,
+        message: 'Moto deleted'
+      })
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 // PATCH
-router.patch('/:id', upload.single('image'), async (request, response, next) => {
-  try {
-    const { id } = request.params
-    const { body, file } = request
+router.patch(
+  '/:id',
+  upload.single('image'),
+  async (request, response, next) => {
+    try {
+      const { id } = request.params
+      const { body, file } = request
 
-    const motoUpdated = await motosUseCases.update(id, body, file)
-    response.json({
-      success: true,
-      message: 'Moto updated',
-      data: {
-        moto: motoUpdated
-      }
-    })
-  } catch (error) {
-    next(error)
+      const motoUpdated = await motosUseCases.update(id, body, file)
+      response.json({
+        success: true,
+        message: 'Moto updated',
+        data: {
+          moto: motoUpdated
+        }
+      })
+    } catch (error) {
+      next(error)
+    }
   }
-})
+)
 
 export default router
