@@ -97,4 +97,4 @@ async function deleteById (idMoto) {
   return Moto.findByIdAndDelete(idMoto)
 }
 
-export { create, getAll, getByAvailability, getByType, update, deleteById }
+export { create, getAll, getByType, update, deleteById }
