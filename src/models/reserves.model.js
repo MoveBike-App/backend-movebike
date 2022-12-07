@@ -12,6 +12,14 @@ const reserveSchema = new mongoose.Schema({
     ref: 'customers',
     required: true
   },
+  address: {
+    type: String,
+    required: false
+  },
+  coordinates: [{
+    latitude: String,
+    longitude: String
+  }],
   slug: {
     type: String,
     slug: ['reserveNumber', 'totalPrice']

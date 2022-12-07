@@ -27,6 +27,26 @@ const routeSchema = new mongoose.Schema({
     required: false,
     minLength: 5,
     trim: true
+  },
+  hashtags: {
+    type: String,
+    required: false
+  },
+  address: {
+    type: String,
+    required: false
+  },
+  city: {
+    type: String,
+    required: false
+  },
+  state: {
+    type: String,
+    required: false
+  },
+  ZIP: {
+    type: Number,
+    required: false
   }
 }, {
   timestamps: true

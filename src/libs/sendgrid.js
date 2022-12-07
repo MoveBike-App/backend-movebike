@@ -16,10 +16,10 @@ const sendConfirmationEmail = (to, name, token) => {
     subject: 'Confirmación de cuenta',
     fromname: 'MOVEBIKE',
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
-    templateId: 'd-e356d0adb76a43829fad752f4bf604aa',
+    templateId: 'd-c8078f3fce5645da9bb6db7618d32372',
     dynamic_template_data: {
       name,
-      link: `https://frontend-movebike.vercel.app/confirm-email/?token=${token}`
+      link: `https://movebike.mx/confirm-email/?token=${token}`
     }
   }
   return handlerMail.send(msg)
