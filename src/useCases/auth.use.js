@@ -7,6 +7,10 @@ import jwt from '../libs/jwt.js'
 async function login (email, password) {
   const emailFound = await Company.findOne({ email }) || await Customer.findOne({ email })
   if (!emailFound) throw new StatusHttp('invalid!')
+
+  const validEmail = emailFound.validEmail
+  if (!validEmail) throw new StatusHttp('Verify your account!')
+
   const isValidPassword = await bcrypt.compare(password, emailFound.password)
   if (!isValidPassword) throw new StatusHttp('try again!')
 

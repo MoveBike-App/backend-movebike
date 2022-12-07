@@ -25,7 +25,6 @@ async function create (newCustomer, commpanyId, file) {
     { $push: { customers: newUser._id } })
   const token = jwt.sign({ id: newUser._id, email: newUser.email }, '1d')
   await sendConfirmationEmail(newCustomer.email, newCustomer.name, token)
-  console.log(newCustomer.name)
   return newUser
 }
 

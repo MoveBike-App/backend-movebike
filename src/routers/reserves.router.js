@@ -106,7 +106,6 @@ router.patch('/:id', auth, access('customer', 'company'), async (request, respon
       }
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })
