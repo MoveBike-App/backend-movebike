@@ -22,9 +22,22 @@ async function create (newReserve, userCurrent) {
   return reserveCreated
 }
 
-function getAll () {
-  return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
+
+function getAll(){
+  return Reserve.find({})
 }
+/* async function getAll () {
+  const notAvailableDates = await Reserve.find({
+    initialDate: { $gt: new Date('2022-11-01') },
+    finalDate: { $lt: new Date('2022-12-10') }
+  })
+  const map = notAvailableDates.map((r) => r.vehicle._id.valueOf())
+  console.log('NOT AVAILABLE', map)
+  return Reserve.find({
+    initialDate: { $gt: new Date('2022-11-01') },
+    finalDate: { $lt: new Date('2022-12-10') }
+  })
+} */
 
 async function getById (idReserve) {
   const reserveFound = await Reserve.findById(idReserve)

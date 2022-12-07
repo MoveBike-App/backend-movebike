@@ -22,6 +22,10 @@ const companySchema = new mongoose.Schema({
     trim: true,
     match: /.*@.*\..*/
   },
+  validEmail: {
+    type: Boolean,
+    default: true
+  },
   password: {
     type: String,
     required: true
