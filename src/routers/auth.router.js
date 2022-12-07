@@ -16,7 +16,6 @@ router.post('/login', async (request, response, next) => {
       userCurrent: loginInfo.userCurrent
     })
   } catch (error) {
-    console.log(error)
     next(error)
   }
 })

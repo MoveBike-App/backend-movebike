@@ -34,10 +34,6 @@ const customerSchema = new mongoose.Schema({
     type: String,
     required: true
   },
-  isVerify: {
-    type: Boolean,
-    required: false
-  },
   identify: {
     type: String,
     required: true
@@ -51,7 +47,7 @@ const customerSchema = new mongoose.Schema({
     ref: 'reserves'
   }],
   validEmail: {
-    type: String,
+    type: Boolean,
     default: false
   },
   company: {
