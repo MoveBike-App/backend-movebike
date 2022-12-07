@@ -6,10 +6,11 @@ import { access } from '../middlewares/authRole.js'
 import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
+
 // GET
 router.get('/', async (request, response, next) => {
   try {
-    const allMotos = await motosUseCases.getByAvailability()
+    const allMotos = await motosUseCases.getAll()
 
     response.json({
       success: true,
@@ -23,32 +24,12 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-/* // GET
-router.get('/:id', async (request, response, next) => {
-  try {
-    const { id } = request.params
-
-    const getMoto = await motosUseCases.getById(id)
-
-    response.json({
-      success: true,
-      message: 'Moto',
-      data: {
-        moto: getMoto
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-})
- */
 // GET
-router.get('/:moto', async (request, response, next) => {
+router.get('/:idMoto', async (request, response, next) => {
   try {
-    const { moto } = request.params
-    const { typesearch } = request.headers
+    const { idMoto } = request.params
 
-    const getMoto = await motosUseCases.getByType(moto, typesearch)
+    const getMoto = await motosUseCases.getById(idMoto)
 
     response.json({
       success: true,
@@ -63,71 +44,57 @@ router.get('/:moto', async (request, response, next) => {
 })
 
 // CREATE
-router.post(
-  '/',
-  auth,
-  upload.single('image'),
-  async (request, response, next) => {
-    try {
-      const { body, userCurrent } = request
-      const file = request.file
-
-      const motoCreated = await motosUseCases.create(body, userCurrent, file)
-      response.json({
-        success: true,
-        message: 'New moto created',
-        data: {
-          moto: motoCreated
-        }
-      })
-    } catch (error) {
-      next(error)
-    }
+router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
+  try {
+    const token = request.headers.authorization
+    const { body, file } = request
+    const { id } = jwtDecode(token)
+    const motoCreated = await motosUseCases.create(body, id, file)
+    response.json({
+      success: true,
+      message: 'New moto created',
+      data: {
+        motos: motoCreated
+      }
+    })
+  } catch (error) {
+    next(error)
   }
-)
+})
 
 // DELETE
-router.delete(
-  '/:id',
-  auth,
-  access('company'),
-  async (request, response, next) => {
-    try {
-      const { id } = request.params
+router.delete('/:id', auth, access('company'), async (request, response, next) => {
+  try {
+    const { id } = request.params
 
-      const motoDeleted = await motosUseCases.deleteById(id)
+    const motoDeleted = await motosUseCases.deleteById(id)
 
-      response.json({
-        success: true,
-        message: 'Moto deleted'
-      })
-    } catch (error) {
-      next(error)
-    }
+    response.json({
+      success: true,
+      message: 'Moto deleted'
+    })
+  } catch (error) {
+    next(error)
   }
-)
+})
 
 // PATCH
-router.patch(
-  '/:id',
-  upload.single('image'),
-  async (request, response, next) => {
-    try {
-      const { id } = request.params
-      const { body, file } = request
+router.patch('/:id', auth, access('company'), upload.single('image'), async (request, response, next) => {
+  try {
+    const { id } = request.params
+    const { body, file } = request
 
-      const motoUpdated = await motosUseCases.update(id, body, file)
-      response.json({
-        success: true,
-        message: 'Moto updated',
-        data: {
-          moto: motoUpdated
-        }
-      })
-    } catch (error) {
-      next(error)
-    }
+    const motoUpdated = await motosUseCases.update(id, body, file)
+    response.json({
+      success: true,
+      message: 'Moto updated',
+      data: {
+        moto: motoUpdated
+      }
+    })
+  } catch (error) {
+    next(error)
   }
-)
+})
 
 export default router
