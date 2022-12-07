@@ -9,7 +9,7 @@ const router = express.Router()
 // GET
 router.get('/', async (request, response, next) => {
   try {
-    const allMotos = await motosUseCases.getAll()
+    const allMotos = await motosUseCases.getByAvailability()
 
     response.json({
       success: true,
