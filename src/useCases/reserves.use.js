@@ -3,6 +3,7 @@ import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
 import { Moto } from '../models/motos.model.js'
 import { sendReserveEmail, sendReserveToCompany } from '../libs/sendgrid.js'
+import { format } from 'date-fns'
 
 async function create (newReserve, userCurrent) {
   const userFound = await Customer.findById(userCurrent)
@@ -17,7 +18,8 @@ async function create (newReserve, userCurrent) {
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
   console.log('reserva creada', reserveCreated)
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.initialDate, reserveCreated.finalDate, reserveCreated.totalPrice)
+  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'), reserveCreated.finalDate, reserveCreated.totalPrice)
+  console.log('EMAIL', userFound.email, 'vehicle', reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'))
   await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
   return reserveCreated
 }
