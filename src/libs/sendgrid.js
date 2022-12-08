@@ -31,7 +31,7 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
     subject: 'Confirmación de reserva',
     fromname: 'MOVEBIKE',
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
-    templateId: 'd-5949ceb6691046ac979ce4a345d3074a',
+    templateId: 'd-dffa1f489a2a41f7968553a5bdf923be',
     dynamic_template_data: {
       vehicle,
       initialDate,

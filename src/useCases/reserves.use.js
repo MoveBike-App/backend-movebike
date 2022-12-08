@@ -13,13 +13,10 @@ async function create (newReserve, userCurrent) {
   }
   const countReserves = await Reserve.estimatedDocumentCount() + 1
   const reserveNo = `MB-00${countReserves}`
-  const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })
-
+  const reserveCreated = await (await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })).populate('vehicle')
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
-  console.log('reserva creada', reserveCreated)
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'), reserveCreated.finalDate, reserveCreated.totalPrice)
-  console.log('EMAIL', userFound.email, 'vehicle', reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'))
+  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'), format(new Date(reserveCreated.finalDate), 'dd/MM/yyyy H:mm b'), reserveCreated.totalPrice)
   await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
   return reserveCreated
 }
