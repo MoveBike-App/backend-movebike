@@ -16,8 +16,8 @@ async function create (newReserve, userCurrent) {
   const reserveCreated = await (await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })).populate('vehicle')
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd/MM/yyyy H:mm b'), format(new Date(reserveCreated.finalDate), 'dd/MM/yyyy H:mm b'), reserveCreated.totalPrice)
-  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
+  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), reserveCreated.totalPrice)
+  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), userFound.name, userFound.email, reserveCreated.totalPrice)
   return reserveCreated
 }
 
