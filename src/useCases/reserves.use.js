@@ -17,7 +17,7 @@ async function create (newReserve, userCurrent) {
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
   await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), reserveCreated.totalPrice)
-  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), userFound.name, userFound.email, reserveCreated.totalPrice)
+  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), userFound.name, userFound.email, reserveCreated.totalPrice)
   return reserveCreated
 }
 
