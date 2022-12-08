@@ -7,15 +7,33 @@ import { accessOwnerReserve } from '../middlewares/ownerAccount.js'
 const router = express.Router()
 
 // GET
-router.get('/', auth, access('company'), async (request, response, next) => {
+router.get('/', async (request, response, next) => {
   try {
     const allReserves = await reservesUseCases.getAll()
 
     response.json({
       success: true,
-      message: 'All reserves',
+      message: 'All motos',
       data: {
         reserves: allReserves
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
+// GET
+router.get('/available-vehicles', auth, access('company'), async (request, response, next) => {
+  try {
+    const { initialDate, finalDate } = request.query
+
+    const availableVehiclesByDate = await reservesUseCases.getByAvailability(initialDate, finalDate)
+    response.json({
+      success: true,
+      message: 'Available vehicles by dates',
+      data: {
+        motos: availableVehiclesByDate
       }
     })
   } catch (error) {

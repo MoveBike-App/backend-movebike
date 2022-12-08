@@ -55,7 +55,7 @@ const motoSchema = new mongoose.Schema({
     type: Number,
     required: false
   },
-  availableDate: {
+  notAvailableDates: {
     type: [Date],
     default: [],
     required: false

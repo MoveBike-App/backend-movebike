@@ -48,19 +48,6 @@ async function getById (idCustomer) {
   return customer
 }
 
-/* async function getBySlug (slugCustomer) {
-  const customerFound = await Customer.findOne(slugCustomer)
-  if (!customerFound) throw new StatusHttp('Customer not found', 400)
-  return Customer.findById(customerFound).populate({
-    path: 'reserve',
-    populate: {
-      path: 'vehicle',
-      select: ['name', 'price', 'image', 'keyImage', 'slug']
-    }
-  }
-  )
-}
- */
 async function update (idCustomer, newData, newFile) {
   const customerFound = await Customer.findById(idCustomer)
   if (!customerFound) throw new StatusHttp('Customer not found', 400)
