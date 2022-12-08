@@ -25,25 +25,6 @@ function getAll () {
     .populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
 }
 
-/* function getByAvailability () {
-  return Reserve.find({
-    initialDate: { $gt: new Date('2022-11-01') },
-    finalDate: { $lt: new Date('2022-12-03') }
-  })
-} */
-
-/* async function getById (idMoto) {
-  const motoFound = await Moto.findById(idMoto)
-  if (!motoFound) throw new StatusHttp('Moto not found', 400)
-  return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] })
-} */
-
-/* async function getBySlug (slugMoto) {
-  const motoFound = await Moto.findOne(slugMoto)
-  if (!motoFound) throw new StatusHttp('Moto not found', 400)
-  return Moto.findById(motoFound).populate({ path: 'company', select: ['name'] }).populate({ path: 'features', select: ['name', 'icon', 'keyIcon'] })
-} */
-
 async function getByType (moto, type) {
   const BY_ID = 'BY_ID'
   const BY_SLUG = 'BY_SLUG'

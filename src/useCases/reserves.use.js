@@ -14,18 +14,17 @@ async function create (newReserve, userCurrent) {
   const reserveNo = `MB-00${countReserves}`
   const reserveCreated = await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })
 
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.totalPrice)
-
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
-
+  console.log('reserva creada', reserveCreated)
+  await sendReserveEmail(userFound.email, reserveCreated.vehicle, reserveCreated.initialDate, reserveCreated.finalDate, reserveCreated.totalPrice)
   await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle, reserveCreated.totalPrice, userFound.name, userFound.phone, userFound.location, userFound.identify)
   return reserveCreated
 }
 
- function getAll () {
+function getAll () {
   return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
-} 
+}
 
 async function getByAvailability (initialDate, finalDate) {
   const notAvailableDates = await Reserve.find({
@@ -34,7 +33,7 @@ async function getByAvailability (initialDate, finalDate) {
   })
 
   const notAvailableVehicles = notAvailableDates.map((r) => r.vehicle._id.valueOf())
- 
+
   const availableVehicles = await Moto.find({ _id: { $nin: notAvailableVehicles } })
   return availableVehicles
 }
