@@ -30,7 +30,6 @@ router.get('/:moto', async (request, response, next) => {
     const { moto } = request.params
     const { typesearch } = request.headers
 
-    console.log(request.params, request.headers)
     const getMoto = await motosUseCases.getByType(moto, typesearch)
 
     response.json({

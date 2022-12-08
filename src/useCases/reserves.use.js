@@ -23,9 +23,9 @@ async function create (newReserve, userCurrent) {
   return reserveCreated
 }
 
-/*  function getAll () {
+ function getAll () {
   return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
-}  */
+} 
 
 async function getByAvailability (initialDate, finalDate) {
   const notAvailableDates = await Reserve.find({
@@ -36,8 +36,6 @@ async function getByAvailability (initialDate, finalDate) {
   const notAvailableVehicles = notAvailableDates.map((r) => r.vehicle._id.valueOf())
  
   const availableVehicles = await Moto.find({ _id: { $nin: notAvailableVehicles } })
-  console.log('NO DISPONIBLES', notAvailableDates.length)
-  console.log('DISPONIBLES', availableVehicles.length);
   return availableVehicles
 }
 
@@ -48,14 +46,6 @@ async function getById (idReserve) {
   }
   return Reserve.findById(reserveFound).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
 }
-
-/* async function getBySlug (slugReserve) {
-  const reserveFound = await Reserve.findOne(slugReserve)
-  if (!reserveFound) {
-    throw new StatusHttp('Reserve not found', 400)
-  }
-  return Reserve.findById(reserveFound).populate('customer')
-} */
 
 async function update (idReserve, newData) {
   const reserveFound = await Reserve.findById(idReserve)
@@ -75,6 +65,7 @@ async function deleteById (idReserve) {
 
 export {
   create,
+  getAll,
   getByAvailability,
   getById,
   update,

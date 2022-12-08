@@ -49,7 +49,7 @@ const reserveSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'processing',
-    enum: ['processing', 'reserved', 'onWay', 'delivered', 'canceled']
+    enum: ['processing', 'reserved', 'onWay', 'delivered', 'canceled', 'backInStock']
   },
   isPaid: {
     type: Boolean,
