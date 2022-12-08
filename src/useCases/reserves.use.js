@@ -1,6 +1,7 @@
 import { Reserve } from '../models/reserves.model.js'
 import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
+import { Moto } from '../models/motos.model.js'
 import { sendReserveEmail, sendReserveToCompany } from '../libs/sendgrid.js'
 
 async function create (newReserve, userCurrent) {
@@ -22,21 +23,23 @@ async function create (newReserve, userCurrent) {
   return reserveCreated
 }
 
-function getAll () {
+/*  function getAll () {
   return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
-}
-/* async function getAll () {
+}  */
+
+async function getByAvailability (initialDate, finalDate) {
   const notAvailableDates = await Reserve.find({
-    initialDate: { $gt: new Date('2022-11-01') },
-    finalDate: { $lt: new Date('2022-12-10') }
+    initialDate: { $gte: new Date(initialDate) },
+    finalDate: { $lte: new Date(finalDate) }
   })
-  const map = notAvailableDates.map((r) => r.vehicle._id.valueOf())
-  console.log('NOT AVAILABLE', map)
-  return Reserve.find({
-    initialDate: { $gt: new Date('2022-11-01') },
-    finalDate: { $lt: new Date('2022-12-10') }
-  })
-} */
+
+  const notAvailableVehicles = notAvailableDates.map((r) => r.vehicle._id.valueOf())
+ 
+  const availableVehicles = await Moto.find({ _id: { $nin: notAvailableVehicles } })
+  console.log('NO DISPONIBLES', notAvailableDates.length)
+  console.log('DISPONIBLES', availableVehicles.length);
+  return availableVehicles
+}
 
 async function getById (idReserve) {
   const reserveFound = await Reserve.findById(idReserve)
@@ -72,9 +75,8 @@ async function deleteById (idReserve) {
 
 export {
   create,
-  getAll,
+  getByAvailability,
   getById,
-  /* getBySlug, */
   update,
   deleteById
 }
