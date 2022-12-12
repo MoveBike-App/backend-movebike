@@ -30,23 +30,23 @@ async function update (idRoute, newData, newFile) {
 
   return Route.findByIdAndUpdate(idRoute, newData, { new: true })
 }
-async function getById (idRoute) {
-  const routeFound = await Route.findById(idRoute)
-  if (!routeFound) {
-    throw new StatusHttp('Reserve not found', 400)
+
+async function getByType (route, type) {
+  const BY_ID = 'BY_ID'
+  const BY_SLUG = 'BY_SLUG'
+  let routeFound
+  if (type === BY_ID) {
+    routeFound = await Route.findById(route)
+  } else if (type === BY_SLUG) {
+    routeFound = await Route.findOne({ slug: route })
+  } else {
+    throw new StatusHttp('Search not supported', 400)
   }
-  return Route.findById(routeFound)
+
+  if (!routeFound) throw new StatusHttp('Route not found', 400)
+
+  return routeFound
 }
-
-/*
-async function getBySlug (slugRoute) {
-  const routeFound = await Route.findOne(slugRoute)
-
-  if (!routeFound) {
-    throw new StatusHttp('Route not found', 400)
-  }
-  return Route.findById(routeFound)
-} */
 
 async function deleteById (idRoute) {
   const routeFound = await Route.findById(idRoute)
@@ -58,4 +58,4 @@ async function deleteById (idRoute) {
   return Route.findByIdAndDelete(idRoute)
 }
 
-export { getAll, create, update, deleteById, getById }
+export { getAll, create, update, deleteById, getByType }
