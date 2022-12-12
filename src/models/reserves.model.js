@@ -41,6 +41,10 @@ const reserveSchema = new mongoose.Schema({
     type: Date,
     required: false
   },
+  allDates: [{
+    type: Date,
+    required: false
+  }],
   totalDays: {
     type: Number,
     required: false
