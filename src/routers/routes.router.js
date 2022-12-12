@@ -24,16 +24,18 @@ router.get('/', async (request, response, next) => {
 })
 
 // GET
-router.get('/:id', auth, access('company', 'customer'), async (request, response, next) => {
+router.get('/:route', async (request, response, next) => {
   try {
-    const { id } = request.params
-    const getRoute = await routesUseCases.getById(id)
+    const { route } = request.params
+    const { typesearch } = request.headers
+
+    const getRoute = await routesUseCases.getByType(route, typesearch)
 
     response.json({
       success: true,
       message: 'Route',
       data: {
-        reserves: getRoute
+        route: getRoute
       }
     })
   } catch (error) {
@@ -41,23 +43,6 @@ router.get('/:id', auth, access('company', 'customer'), async (request, response
   }
 })
 
-/* // GET /Routes by Id
-router.get('/:slug', async (request, response, next) => {
-  try {
-    const { slug } = request.params
-    const getRoute = await routesUseCases.getBySlug({ slug })
-    response.json({
-      success: true,
-      message: 'Ruote found',
-      data: {
-        post: getRoute
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-})
- */
 // POST /Routes
 router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
