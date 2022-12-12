@@ -3,7 +3,7 @@ import { Customer } from '../models/customers.model.js'
 import { StatusHttp } from '../libs/statusHttp.js'
 import { Moto } from '../models/motos.model.js'
 import { sendReserveEmail, sendReserveToCompany } from '../libs/sendgrid.js'
-import { format } from 'date-fns'
+import { format, eachDayOfInterval } from 'date-fns'
 
 async function create (newReserve, userCurrent) {
   const userFound = await Customer.findById(userCurrent)
@@ -14,10 +14,21 @@ async function create (newReserve, userCurrent) {
   const countReserves = await Reserve.estimatedDocumentCount() + 1
   const reserveNo = `MB-00${countReserves}`
   const reserveCreated = await (await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })).populate('vehicle')
+
+  const allReservationDates = eachDayOfInterval({
+    start: reserveCreated.initialDate,
+    end: reserveCreated.finalDate
+  })
+
   await Customer.findByIdAndUpdate(userCurrent,
     { $push: { reserve: reserveCreated._id } })
+
   await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), reserveCreated.totalPrice)
   await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), userFound.name, userFound.email, reserveCreated.totalPrice)
+
+  await Moto.findByIdAndUpdate(reserveCreated.vehicle,
+    { $push: { notAvailableDates: allReservationDates } })
+
   return reserveCreated
 }
 

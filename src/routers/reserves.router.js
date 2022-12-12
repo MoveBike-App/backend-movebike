@@ -2,7 +2,6 @@ import express from 'express'
 import * as reservesUseCases from '../useCases/reserves.use.js'
 import { auth } from '../middlewares/auth.js'
 import { access } from '../middlewares/authRole.js'
-import { accessOwnerReserve } from '../middlewares/ownerAccount.js'
 
 const router = express.Router()
 
@@ -13,7 +12,7 @@ router.get('/', async (request, response, next) => {
 
     response.json({
       success: true,
-      message: 'All motos',
+      message: 'All Reserves',
       data: {
         reserves: allReserves
       }
