@@ -22,6 +22,23 @@ router.get('/', async (request, response, next) => {
   }
 })
 
+// GET by filter
+router.get('/filter', auth, access('company'), async (request, response, next) => {
+  try {
+    const allReserves = await reservesUseCases.getByFilter()
+
+    response.json({
+      success: true,
+      message: 'All Reserves',
+      data: {
+        reserves: allReserves
+      }
+    })
+  } catch (error) {
+    next(error)
+  }
+})
+
 // GET
 router.get('/available-vehicles', auth, access('company'), async (request, response, next) => {
   try {
@@ -57,24 +74,6 @@ router.get('/:id', auth, access('company', 'customer'), async (request, response
     next(error)
   }
 })
-
-/* // GET
-router.get('/:slug', auth, access('company', 'customer'), async (request, response, next) => {
-  try {
-    const { slug } = request.params
-    const getReserve = await reservesUseCases.getBySlug({ slug })
-
-    response.json({
-      success: true,
-      message: 'Reserve',
-      data: {
-        reserves: getReserve
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-}) */
 
 // POST
 router.post('/', auth, access('customer'), async (request, response, next) => {
