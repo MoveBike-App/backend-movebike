@@ -21,10 +21,13 @@ async function create (newReserve, userCurrent) {
     })
   ).populate('vehicle')
 
-  const allReservationDates = eachDayOfInterval({
+  const allReservation = eachDayOfInterval({
     start: reserveCreated.initialDate,
     end: reserveCreated.finalDate
   })
+
+  const allReservationDates = format(allReservation, 'dd/MMM/yyyy')
+  console.log(allReservationDates)
 
   await Customer.findByIdAndUpdate(userCurrent, {
     $push: { reserve: reserveCreated._id }
@@ -47,14 +50,13 @@ async function create (newReserve, userCurrent) {
     reserveCreated.totalPrice
   )
 
-  await Reserve.findByIdAndUpdate(reserveCreated, {
+  await Reserve.findByIdAndUpdate(reserveCreated._id.valueOf(), {
     $push: { allDates: allReservationDates }
   })
 
   await Moto.findByIdAndUpdate(reserveCreated.vehicle, {
     $push: { notAvailableDates: allReservationDates }
   })
-
   return reserveCreated
 }
 
@@ -80,13 +82,13 @@ function getAll () {
 
 async function getByFilter (initDate, endDate, filters, size) {
   let allReserves = await Reserve.aggregate([
-    {
+    /* {
       $match: {
         initialDate: {
           $gte: initDate
         }
       }
-    },
+    }, */
     {
       $group: { _id: '$vehicle', count: { $sum: 1 }, totalAmountPrice: { $sum: '$totalPrice' } }
     },
@@ -103,8 +105,6 @@ async function getByFilter (initDate, endDate, filters, size) {
   })
 
   const reserves = Promise.all(allReserves)
-
-  console.log('res', reserves)
 
   return reserves
 }
