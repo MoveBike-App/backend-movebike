@@ -11,29 +11,102 @@ async function create (newReserve, userCurrent) {
   if (!userFound) {
     throw new StatusHttp('User not found', 404)
   }
-  const countReserves = await Reserve.estimatedDocumentCount() + 1
+  const countReserves = (await Reserve.estimatedDocumentCount()) + 1
   const reserveNo = `MB-00${countReserves}`
-  const reserveCreated = await (await Reserve.create({ ...newReserve, customer: userCurrent, reserveNumber: reserveNo })).populate('vehicle')
+  const reserveCreated = await (
+    await Reserve.create({
+      ...newReserve,
+      customer: userCurrent,
+      reserveNumber: reserveNo
+    })
+  ).populate('vehicle')
 
-  const allReservationDates = eachDayOfInterval({
+  const allReservation = eachDayOfInterval({
     start: reserveCreated.initialDate,
     end: reserveCreated.finalDate
   })
 
-  await Customer.findByIdAndUpdate(userCurrent,
-    { $push: { reserve: reserveCreated._id } })
+  const allReservationDates = format(allReservation, 'dd/MMM/yyyy')
+  console.log(allReservationDates)
 
-  await sendReserveEmail(userFound.email, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), reserveCreated.totalPrice)
-  await sendReserveToCompany(reserveCreated.reserveNumber, reserveCreated.vehicle.name, format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'), format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'), userFound.name, userFound.email, reserveCreated.totalPrice)
+  await Customer.findByIdAndUpdate(userCurrent, {
+    $push: { reserve: reserveCreated._id }
+  })
 
-  await Moto.findByIdAndUpdate(reserveCreated.vehicle,
-    { $push: { notAvailableDates: allReservationDates } })
+  await sendReserveEmail(
+    userFound.email,
+    reserveCreated.vehicle.name,
+    format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'),
+    format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'),
+    reserveCreated.totalPrice
+  )
+  await sendReserveToCompany(
+    reserveCreated.reserveNumber,
+    reserveCreated.vehicle.name,
+    format(new Date(reserveCreated.initialDate), 'dd-MMM-yyyy H:mm'),
+    format(new Date(reserveCreated.finalDate), 'dd-MMM-yyyy H:mm'),
+    userFound.name,
+    userFound.email,
+    reserveCreated.totalPrice
+  )
 
+  await Reserve.findByIdAndUpdate(reserveCreated._id.valueOf(), {
+    $push: { allDates: allReservationDates }
+  })
+
+  await Moto.findByIdAndUpdate(reserveCreated.vehicle, {
+    $push: { notAvailableDates: allReservationDates }
+  })
   return reserveCreated
 }
 
 function getAll () {
-  return Reserve.find({}).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
+  return Reserve.find({})
+    .populate({
+      path: 'customer',
+      select: [
+        'name',
+        'email',
+        'phone',
+        'identify',
+        'keyIdentify',
+        'slug',
+        'location'
+      ]
+    })
+    .populate({
+      path: 'vehicle',
+      select: ['name', 'slug', 'image', 'keyImage', 'price']
+    })
+}
+
+async function getByFilter (initDate, endDate, filters, size) {
+  let allReserves = await Reserve.aggregate([
+    /* {
+      $match: {
+        initialDate: {
+          $gte: initDate
+        }
+      }
+    }, */
+    {
+      $group: { _id: '$vehicle', count: { $sum: 1 }, totalAmountPrice: { $sum: '$totalPrice' } }
+    },
+    {
+      $sort: { count: -1 } // orden descendente
+    },
+    {
+      $limit: 5
+    }
+  ])
+  allReserves = allReserves.map(async (r) => {
+    r.vehicle = await Moto.findById(r._id.valueOf())
+    return r
+  })
+
+  const reserves = Promise.all(allReserves)
+
+  return reserves
 }
 
 async function getByAvailability (initialDate, finalDate) {
@@ -42,9 +115,13 @@ async function getByAvailability (initialDate, finalDate) {
     finalDate: { $lte: new Date(finalDate) }
   })
 
-  const notAvailableVehicles = notAvailableDates.map((r) => r.vehicle._id.valueOf())
+  const notAvailableVehicles = notAvailableDates.map((r) =>
+    r.vehicle._id.valueOf()
+  )
 
-  const availableVehicles = await Moto.find({ _id: { $nin: notAvailableVehicles } })
+  const availableVehicles = await Moto.find({
+    _id: { $nin: notAvailableVehicles }
+  })
   return availableVehicles
 }
 
@@ -53,7 +130,23 @@ async function getById (idReserve) {
   if (!reserveFound) {
     throw new StatusHttp('Reserve not found', 400)
   }
-  return Reserve.findById(reserveFound).populate({ path: 'customer', select: ['name', 'email', 'phone', 'identify', 'keyIdentify', 'slug', 'location'] }).populate({ path: 'vehicle', select: ['name', 'slug', 'image', 'keyImage', 'price'] })
+  return Reserve.findById(reserveFound)
+    .populate({
+      path: 'customer',
+      select: [
+        'name',
+        'email',
+        'phone',
+        'identify',
+        'keyIdentify',
+        'slug',
+        'location'
+      ]
+    })
+    .populate({
+      path: 'vehicle',
+      select: ['name', 'slug', 'image', 'keyImage', 'price']
+    })
 }
 
 async function update (idReserve, newData) {
@@ -78,5 +171,6 @@ export {
   getByAvailability,
   getById,
   update,
-  deleteById
+  deleteById,
+  getByFilter
 }
