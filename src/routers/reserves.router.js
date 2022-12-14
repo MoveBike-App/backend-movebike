@@ -25,7 +25,8 @@ router.get('/', async (request, response, next) => {
 // GET by filter
 router.get('/filter', auth, access('company'), async (request, response, next) => {
   try {
-    const allReserves = await reservesUseCases.getByFilter()
+    const { initialDate, finalDate, size, operation } = request.query
+    const allReserves = await reservesUseCases.getByFilter(initialDate, finalDate, parseInt(size), operation)
 
     response.json({
       success: true,

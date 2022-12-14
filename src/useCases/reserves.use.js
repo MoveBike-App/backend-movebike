@@ -77,33 +77,53 @@ function getAll () {
     })
 }
 
-async function getByFilter (initDate, endDate, filters, size) {
-  let allReserves = await Reserve.aggregate([
-    /* {
-      $match: {
-        initialDate: {
-          $gte: initDate
-        }
-      }
-    }, */
+async function getByFilter (initialDate, finalDate, size, operation) {
+  const matchOptions = {}
+  if (initialDate) {
+    matchOptions.createdAt = {
+      $gte: new Date(initialDate)
+    }
+  }
+  if (finalDate) {
+    matchOptions.createdAt = {
+      $lte: new Date(finalDate + 'T23:59:59.999Z')
+    }
+  }
+  let groupField = '$vehicle'
+  if (operation && operation === 'total') {
+    groupField = null
+  }
+  const aggregateOptions = [
     {
-      $group: { _id: '$vehicle', count: { $sum: 1 }, totalAmountPrice: { $sum: '$totalPrice' } }
+      $match: matchOptions
+    },
+    {
+      $group: { _id: groupField, count: { $sum: 1 }, totalAmountPrice: { $sum: '$totalPrice' } }
     },
     {
       $sort: { count: -1 } // orden descendente
-    },
-    {
-      $limit: 5
     }
-  ])
-  allReserves = allReserves.map(async (r) => {
-    r.vehicle = await Moto.findById(r._id.valueOf())
-    return r
-  })
+  ]
+  if (size) {
+    aggregateOptions.push({
+      $limit: size
+    })
+  }
 
-  const reserves = Promise.all(allReserves)
+  console.log(matchOptions)
 
-  return reserves
+  let allReserves = await Reserve.aggregate(aggregateOptions)
+
+  if (!operation || operation !== 'total') {
+    allReserves = allReserves.map(async (r) => {
+      r.vehicle = await Moto.findById(r._id.valueOf())
+      return r
+    })
+
+    const reserves = Promise.all(allReserves)
+    return reserves
+  }
+  return allReserves
 }
 
 async function getByAvailability (initialDate, finalDate) {
