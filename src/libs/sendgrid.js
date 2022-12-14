@@ -16,10 +16,10 @@ const sendConfirmationEmail = (to, name, token) => {
     subject: 'Confirmación de cuenta',
     fromname: 'MOVEBIKE',
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
-    templateId: 'd-e356d0adb76a43829fad752f4bf604aa',
+    templateId: 'd-c8078f3fce5645da9bb6db7618d32372',
     dynamic_template_data: {
       name,
-      link: `https://frontend-movebike.vercel.app/confirm-email/?token=${token}`
+      link: `https://movebike.mx/confirm-email/?token=${token}`
     }
   }
   return handlerMail.send(msg)
@@ -31,7 +31,7 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
     subject: 'Confirmación de reserva',
     fromname: 'MOVEBIKE',
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
-    templateId: 'd-5949ceb6691046ac979ce4a345d3074a',
+    templateId: 'd-dffa1f489a2a41f7968553a5bdf923be',
     dynamic_template_data: {
       vehicle,
       initialDate,
@@ -42,21 +42,21 @@ const sendReserveEmail = (to, vehicle, initialDate, finalDate, totalPrice) => {
   return handlerMail.send(msg)
 }
 
-const sendReserveToCompany = (reserveNumber, vehicle, totalPrice, name, phone, location, identify) => {
+const sendReserveToCompany = (reserveNumber, vehicle, initialDate, finalDate, name, email, totalPrice) => {
   const msg = {
-    to: { email: 'movebikeapp@gmail.com' /* empresa con la que se trabajará */ },
+    to: { email: 'movebikeapp@gmail.com' },
     subject: 'Tienes una nueva reserva',
     fromname: 'MOVEBIKE',
     from: { name: 'MOVEBIKE', email: 'movebikeapp@gmail.com' },
-    templateId: 'd-08c94abb80f64875b9a8d95327a314ed',
+    templateId: 'd-d3a72cc1e7134644811f97ff8a5bd190',
     dynamic_template_data: {
       reserveNumber,
       vehicle,
-      totalPrice,
+      initialDate,
+      finalDate,
       name,
-      phone,
-      location,
-      identify
+      email,
+      totalPrice
     }
   }
   return handlerMail.send(msg)

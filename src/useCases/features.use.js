@@ -19,19 +19,13 @@ async function getById (idFeature) {
   return Feature.findById(featureFound)
 }
 
-/* async function getBySlug (slugFeature) {
-  const featureFound = await Feature.findOne(slugFeature)
-  if (!featureFound) throw new StatusHttp('Feature not found', 400)
-  return Feature.findById(featureFound)
-}
- */
 async function update (idFeature, newData, newFile) {
   const featureFound = await Feature.findById(idFeature)
   if (!featureFound) throw new StatusHttp('Feature not found', 400)
 
   if (featureFound.icon) {
     const replaceImg = s3.deleteObject({ Key: featureFound.keyIcon, Bucket: config.AWS_BUCKET_NAME }).promise()
-    if (!replaceImg) throw new StatusHttp('Try again', 400)
+    if (!replaceImg) throw new StatusHttp('File not found', 400)
   }
 
   if (newFile) {
@@ -48,7 +42,7 @@ async function deleteById (idFeature) {
 
   if (featureFound.icon) {
     const deleteImg = s3.deleteObject({ Key: featureFound.keyIcon, Bucket: config.AWS_BUCKET_NAME }).promise()
-    if (!deleteImg) throw new StatusHttp('Try again!', 400)
+    if (!deleteImg) throw new StatusHttp('File not found', 400)
   }
   return Feature.findByIdAndDelete(idFeature)
 }

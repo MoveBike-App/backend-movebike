@@ -55,11 +55,10 @@ const motoSchema = new mongoose.Schema({
     type: Number,
     required: false
   },
-  availableDate: {
-    type: [Date],
-    default: [],
+  notAvailableDates: [{
+    type: Date,
     required: false
-  },
+  }],
   company: {
     type: mongoose.Schema.Types.ObjectId,
     ref: 'companies',

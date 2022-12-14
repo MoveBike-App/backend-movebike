@@ -12,6 +12,14 @@ const reserveSchema = new mongoose.Schema({
     ref: 'customers',
     required: true
   },
+  address: {
+    type: String,
+    required: false
+  },
+  coordinates: [{
+    latitude: String,
+    longitude: String
+  }],
   slug: {
     type: String,
     slug: ['reserveNumber', 'totalPrice']
@@ -33,6 +41,10 @@ const reserveSchema = new mongoose.Schema({
     type: Date,
     required: false
   },
+  allDates: [{
+    type: Date,
+    required: false
+  }],
   totalDays: {
     type: Number,
     required: false
@@ -41,7 +53,7 @@ const reserveSchema = new mongoose.Schema({
     type: String,
     required: true,
     default: 'processing',
-    enum: ['processing', 'reserved', 'onWay', 'delivered', 'canceled']
+    enum: ['processing', 'reserved', 'onWay', 'delivered', 'canceled', 'backInStock']
   },
   isPaid: {
     type: Boolean,

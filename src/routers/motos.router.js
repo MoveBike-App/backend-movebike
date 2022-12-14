@@ -6,6 +6,7 @@ import { access } from '../middlewares/authRole.js'
 import { upload } from '../middlewares/multer.js'
 
 const router = express.Router()
+
 // GET
 router.get('/', async (request, response, next) => {
   try {
@@ -23,31 +24,13 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-/* // GET
-router.get('/:id', async (request, response, next) => {
-  try {
-    const { id } = request.params
-
-    const getMoto = await motosUseCases.getById(id)
-
-    response.json({
-      success: true,
-      message: 'Moto',
-      data: {
-        moto: getMoto
-      }
-    })
-  } catch (error) {
-    next(error)
-  }
-})
- */
 // GET
-router.get('/:slug', async (request, response, next) => {
+router.get('/:moto', async (request, response, next) => {
   try {
-    const { slug } = request.params
+    const { moto } = request.params
+    const { typesearch } = request.headers
 
-    const getMoto = await motosUseCases.getBySlug({ slug })
+    const getMoto = await motosUseCases.getByType(moto, typesearch)
 
     response.json({
       success: true,
@@ -62,17 +45,17 @@ router.get('/:slug', async (request, response, next) => {
 })
 
 // CREATE
-router.post('/', auth, upload.single('image'), async (request, response, next) => {
+router.post('/', auth, access('company'), upload.single('image'), async (request, response, next) => {
   try {
-    const { body, userCurrent } = request
-    const file = request.file
-
-    const motoCreated = await motosUseCases.create(body, userCurrent, file)
+    const token = request.headers.authorization
+    const { body, file } = request
+    const { id } = jwtDecode(token)
+    const motoCreated = await motosUseCases.create(body, id, file)
     response.json({
       success: true,
       message: 'New moto created',
       data: {
-        moto: motoCreated
+        motos: motoCreated
       }
     })
   } catch (error) {

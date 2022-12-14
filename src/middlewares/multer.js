@@ -26,4 +26,9 @@ const multerS3Config = multerS3({
   }
 })
 
-export const upload = multer({ storage: multerS3Config })
+const maxSize = 960000 //  120KB MAX
+
+export const upload = multer({
+  storage: multerS3Config,
+  limits: { fileSize: maxSize }
+})
