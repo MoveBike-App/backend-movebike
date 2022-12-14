@@ -6,13 +6,13 @@ import jwt from '../libs/jwt.js'
 
 async function login (email, password) {
   const emailFound = await Company.findOne({ email }) || await Customer.findOne({ email })
-  if (!emailFound) throw new StatusHttp('invalid!')
+  if (!emailFound) throw new StatusHttp('User not found')
 
   const validEmail = emailFound.validEmail
-  if (!validEmail) throw new StatusHttp('Verify your account!')
+  if (!validEmail) throw new StatusHttp('Verify your account')
 
   const isValidPassword = await bcrypt.compare(password, emailFound.password)
-  if (!isValidPassword) throw new StatusHttp('try again!')
+  if (!isValidPassword) throw new StatusHttp('Invalid credentials', 500)
 
   return {
     token: jwt.sign({ id: emailFound._id, role: emailFound.role, slug: emailFound.slug }),

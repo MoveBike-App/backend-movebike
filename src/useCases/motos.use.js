@@ -54,7 +54,7 @@ async function update (idMoto, newData, newFile) {
     const replaceImg = s3
       .deleteObject({ Key: motoFound.keyImage, Bucket: config.AWS_BUCKET_NAME })
       .promise()
-    if (!replaceImg) throw new StatusHttp('Try again', 400)
+    if (!replaceImg) throw new StatusHttp('File not found', 400)
   }
 
   if (newFile) {
@@ -73,7 +73,7 @@ async function deleteById (idMoto) {
     const deleteImg = s3
       .deleteObject({ Key: motoFound.keyImage, Bucket: config.AWS_BUCKET_NAME })
       .promise()
-    if (!deleteImg) throw new StatusHttp('Try again!', 400)
+    if (!deleteImg) throw new StatusHttp('File not found', 400)
   }
   return Moto.findByIdAndDelete(idMoto)
 }

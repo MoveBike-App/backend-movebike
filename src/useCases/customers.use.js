@@ -11,7 +11,7 @@ async function create (newCustomer, commpanyId, file) {
   const { email, password } = newCustomer
   const customerFound = await Customer.findOne({ email })
   if (customerFound) {
-    throw new StatusHttp('This customer already exist!', 400)
+    throw new StatusHttp('This customer already exist', 400)
   }
   const encryptedPassword = await bcrypt.hash(password)
   const newUser = await Customer.create(

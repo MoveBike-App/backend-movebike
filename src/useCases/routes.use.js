@@ -19,7 +19,7 @@ async function update (idRoute, newData, newFile) {
 
   if (routeFound.image) {
     const replaceImg = s3.deleteObject({ Key: routeFound.keyImage, Bucket: config.AWS_BUCKET_NAME }).promise()
-    if (!replaceImg) throw new StatusHttp('Try again', 400)
+    if (!replaceImg) throw new StatusHttp('File not found', 400)
   }
 
   if (newFile) {
