@@ -4,7 +4,13 @@ import { s3 } from '../libs/s3/index.js'
 import config from '../libs/s3/config.js'
 
 function getAll () {
-  return Route.find({})
+  return Route.find({}).populate({
+    path: 'reactions',
+    populate: {
+      path: 'author',
+      select: ['name']
+    }
+  })
 }
 
 async function create (newRoute, file) {
@@ -36,9 +42,21 @@ async function getByType (route, type) {
   const BY_SLUG = 'BY_SLUG'
   let routeFound
   if (type === BY_ID) {
-    routeFound = await Route.findById(route)
+    routeFound = await Route.findById(route).populate({
+      path: 'reactions',
+      populate: {
+        path: 'author',
+        select: ['name']
+      }
+    })
   } else if (type === BY_SLUG) {
-    routeFound = await Route.findOne({ slug: route })
+    routeFound = await Route.findOne({ slug: route }).populate({
+      path: 'reactions',
+      populate: {
+        path: 'author',
+        select: ['name']
+      }
+    })
   } else {
     throw new StatusHttp('Search not supported', 400)
   }
