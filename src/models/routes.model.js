@@ -47,7 +47,12 @@ const routeSchema = new mongoose.Schema({
   ZIP: {
     type: Number,
     required: false
-  }
+  },
+  reactions: [
+    {
+      type: mongoose.Schema.Types.ObjectId, ref: 'reactions'
+    }
+  ]
 }, {
   timestamps: true
 })
