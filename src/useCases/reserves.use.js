@@ -110,8 +110,6 @@ async function getByFilter (initialDate, finalDate, size, operation) {
     })
   }
 
-  console.log(matchOptions)
-
   let allReserves = await Reserve.aggregate(aggregateOptions)
 
   if (!operation || operation !== 'total') {
