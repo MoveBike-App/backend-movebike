@@ -28,7 +28,7 @@ const routeSchema = new mongoose.Schema({
     minLength: 5,
     trim: true
   },
-  hashtags: {
+  preview: {
     type: String,
     required: false
   },
