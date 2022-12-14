@@ -21,13 +21,10 @@ async function create (newReserve, userCurrent) {
     })
   ).populate('vehicle')
 
-  const allReservation = eachDayOfInterval({
+  const allReservationDates = eachDayOfInterval({
     start: reserveCreated.initialDate,
     end: reserveCreated.finalDate
   })
-
-  const allReservationDates = format(allReservation, 'dd/MMM/yyyy')
-  console.log(allReservationDates)
 
   await Customer.findByIdAndUpdate(userCurrent, {
     $push: { reserve: reserveCreated._id }
@@ -50,7 +47,7 @@ async function create (newReserve, userCurrent) {
     reserveCreated.totalPrice
   )
 
-  await Reserve.findByIdAndUpdate(reserveCreated._id.valueOf(), {
+  await Reserve.findByIdAndUpdate(reserveCreated._id, {
     $push: { allDates: allReservationDates }
   })
 
