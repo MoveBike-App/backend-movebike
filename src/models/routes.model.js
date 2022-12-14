@@ -27,6 +27,10 @@ const routeSchema = new mongoose.Schema({
     required: false,
     minLength: 5,
     trim: true
+  },
+  preview: {
+    type: String,
+    required: false
   }
 }, {
   timestamps: true
