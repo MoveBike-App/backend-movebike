@@ -44,7 +44,6 @@ router.get('/filter', auth, access('company'), async (request, response, next) =
 router.get('/available-vehicles', async (request, response, next) => {
   try {
     const { initialDate, finalDate } = request.query
-
     const availableVehiclesByDate = await reservesUseCases.getByAvailability(initialDate, finalDate)
     response.json({
       success: true,
