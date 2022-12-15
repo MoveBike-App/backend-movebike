@@ -20,7 +20,7 @@ async function addReaction (routeId, userCurrent) {
 }
 
 async function getAll () {
-  return Reaction.find({}).populate({ path: 'customer', select: ['name'] })
+  return Reaction.find({}).populate({ path: 'author', select: ['name'] })
 }
 
 async function getById (idReaction) {
@@ -28,7 +28,7 @@ async function getById (idReaction) {
   if (!reactionFound) {
     throw new StatusHttp('Route not found', 400)
   }
-  return Reaction.findById(idReaction).populate({ path: 'customer', select: ['name'] })
+  return Reaction.findById(idReaction).populate({ path: 'author', select: ['name'] })
 }
 
 async function deleteById (idReaction, userCurrent) {

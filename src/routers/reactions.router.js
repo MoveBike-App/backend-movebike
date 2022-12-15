@@ -15,7 +15,7 @@ router.patch('/:id', auth, async (request, response, next) => {
       success: true,
       message: 'Like!',
       data: {
-        route: routeLiked
+        reaction: routeLiked
       }
     })
   } catch (error) {
