@@ -32,6 +32,10 @@ const routeSchema = new mongoose.Schema({
     type: String,
     required: false
   },
+  googleMapsLink: {
+    type: String,
+    required: false
+  },
   address: {
     type: String,
     required: false
