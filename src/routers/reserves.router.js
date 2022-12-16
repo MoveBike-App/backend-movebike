@@ -22,7 +22,7 @@ router.get('/', async (request, response, next) => {
   }
 })
 
-/* // GET by filter Segunda iteración 
+// GET by filter
 router.get('/filter', auth, access('company'), async (request, response, next) => {
   try {
     const { initialDate, finalDate, size, operation } = request.query
@@ -39,7 +39,7 @@ router.get('/filter', auth, access('company'), async (request, response, next) =
     next(error)
   }
 })
- */
+
 
 // GET
 router.get('/available-vehicles', async (request, response, next) => {

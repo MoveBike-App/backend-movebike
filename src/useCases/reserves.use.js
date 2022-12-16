@@ -77,7 +77,7 @@ function getAll () {
     })
 }
 
-/* async function getByFilter (initialDate, finalDate, size, operation) { Segunda iteración 
+async function getByFilter (initialDate, finalDate, size, operation) {
   const matchOptions = {}
   if (initialDate) {
     matchOptions.createdAt = {
@@ -122,7 +122,7 @@ function getAll () {
     return reserves
   }
   return allReserves
-} */
+}
 
 async function getByAvailability (initialDate, finalDate) {
   const notAvailableDates = await Reserve.find({
@@ -186,5 +186,6 @@ export {
   getByAvailability,
   getById,
   update,
-  deleteById
+  deleteById,
+  getByFilter
 }
