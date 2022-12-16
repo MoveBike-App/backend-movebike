@@ -23,7 +23,7 @@ async function create (newCustomer, commpanyId, file) {
     })
   await Company.findByIdAndUpdate(commpanyId,
     { $push: { customers: newUser._id } })
-  const token = jwt.sign({ id: newUser._id, email: newUser.email }, '1d')
+  const token = jwt.sign({ id: newUser._id, email: newUser.email }, '6h')
   await sendConfirmationEmail(newCustomer.email, newCustomer.name, token)
   return newUser
 }
