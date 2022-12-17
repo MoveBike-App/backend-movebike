@@ -2,15 +2,15 @@ import mongoose from 'mongoose'
 import slug from 'mongoose-slug-generator'
 mongoose.plugin(slug)
 
-const companySchema = new mongoose.Schema({
+const customerSchema = new mongoose.Schema({
   role: {
     type: String,
-    default: 'company'
+    default: 'customer'
   },
   name: {
     type: String,
     trim: true,
-    required: true
+    required: false
   },
   slug: {
     type: String,
@@ -22,32 +22,39 @@ const companySchema = new mongoose.Schema({
     trim: true,
     match: /.*@.*\..*/
   },
-  validEmail: {
-    type: Boolean,
-    default: true
-  },
   password: {
     type: String,
     required: true
   },
   location: {
     type: String,
-    required: true
+    required: false
   },
   phone: {
     type: String,
     required: true
   },
-  motos: [{ /* reference ready */
+  identify: {
+    type: String,
+    required: true
+  },
+  keyIdentify: {
+    type: String,
+    required: false
+  },
+  reserve: [{
     type: mongoose.Schema.Types.ObjectId,
-    ref: 'motos'
+    ref: 'reserves'
   }],
-  customers: [{ /* help */
-    type: mongoose.Schema.Types.ObjectId,
-    ref: 'customers'
-  }]
+  validEmail: {
+    type: Boolean,
+    default: false
+  },
+  company: {
+    type: String
+  }
 }, {
   timestamps: true
 })
 
-export const Company = mongoose.model('companies', companySchema)
+export const Customer = mongoose.model('customers', customerSchema)

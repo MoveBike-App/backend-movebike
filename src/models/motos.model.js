@@ -1,57 +1,76 @@
 import mongoose from 'mongoose'
+import slug from 'mongoose-slug-generator'
+mongoose.plugin(slug)
 
 const motoSchema = new mongoose.Schema({
   name: {
     type: String,
     trim: true,
-    required: true
+    required: false
+  },
+  slug: {
+    type: String,
+    slug: 'name',
+    required: false
   },
   image: {
     type: String,
-    required: true
+    required: false
+  },
+  keyImage: {
+    type: String,
+    required: false
   },
   vehiclePlate: {
     type: String,
-    required: true,
+    required: false,
     trim: true
   },
   model: {
     type: String,
-    required: true
+    required: false
   },
   minAge: {
     type: Number,
-    required: true
+    required: false
   },
   vehicleType: {
     type: String,
     enum: ['moto', 'scooter'],
-    required: true
+    required: false
   },
   securityHold: {
     type: Number,
-    required: true
+    required: false
   },
   price: {
     type: Number,
-    required: true
+    required: false
   },
   inssurance: {
     type: String,
-    required: true
-  },
-  features: {
-    type: [String],
-    default: []
+    required: false
   },
   totalReserves: {
     type: Number,
-    required: true
+    required: false
   },
-  availableDate: {
-    type: [Date],
-    default: []
-  }
+  notAvailableDates: [{
+    type: Date,
+    required: false
+  }],
+  company: {
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'companies',
+    required: false
+  },
+  features: [{
+    type: mongoose.Schema.Types.ObjectId,
+    ref: 'features',
+    required: false
+  }]
+}, {
+  timestamps: true
 })
 
-export const Moto = mongoose.model('Moto', motoSchema)
+export const Moto = mongoose.model('motos', motoSchema)
